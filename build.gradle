@@ -1,0 +1,136 @@
+plugins {
+    id "java-library"
+    id "maven-publish"
+    id "net.neoforged.moddev" version "2.0.107"
+    id "idea"
+}
+
+tasks.named("wrapper", Wrapper).configure {
+    distributionType = Wrapper.DistributionType.BIN
+}
+
+// The published file name is <archivesName>-<version>.jar, so putting the
+// Minecraft version in the project version is what produces
+// DoABarrelRollNeoForge-3.7.3+1.21.1.jar. The "+" is build metadata under
+// semver, which is exactly what a target game version is.
+version = "${mod_version}+${minecraft_version}"
+group = mod_group_id
+
+base {
+    archivesName = archives_name
+}
+
+repositories {
+    // Yet Another Config Lib. Its own maven rather than Modrinth's, because
+    // Modrinth resolves a version to its primary file and YACL publishes the
+    // Fabric and NeoForge builds under one version, so the coordinate can hand
+    // back the wrong loader's jar.
+    maven {
+        name = "Xander Maven"
+        url = "https://maven.isxander.dev/releases"
+    }
+    // Transitive dependencies of YACL.
+    maven {
+        name = "Terraformers"
+        url = "https://maven.terraformersmc.com/releases"
+    }
+}
+
+// Mojang ships Java 21 to end users in 1.21.1, so mods should target Java 21.
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+neoForge {
+    version = project.neo_version
+
+    parchment {
+        mappingsVersion = project.parchment_mappings_version
+        minecraftVersion = project.parchment_minecraft_version
+    }
+
+    runs {
+        client {
+            client()
+            programArguments.addAll "--width", "1920", "--height", "1080"
+        }
+
+        server {
+            server()
+            programArgument "--nogui"
+        }
+
+        configureEach {
+            systemProperty "forge.logging.markers", "REGISTRIES"
+            logLevel = org.slf4j.event.Level.DEBUG
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
+        }
+    }
+}
+
+// Sets up a dependency configuration called "localRuntime". Use it instead of
+// "runtimeOnly" for a dependency that should be present when the development
+// client launches but must not be pulled in by anyone depending on this mod.
+configurations {
+    runtimeClasspath.extendsFrom localRuntime
+}
+
+dependencies {
+    // The config screen is the only thing that touches YACL, and every entry
+    // point into it is guarded by Compat.isYACLLoaded(), so the mod runs
+    // correctly with YACL absent. compileOnly keeps it out of the published
+    // dependency set; localRuntime installs it for development launches.
+    compileOnly "dev.isxander:yet-another-config-lib:${yacl_version}"
+    localRuntime "dev.isxander:yet-another-config-lib:${yacl_version}"
+}
+
+// Expands the properties below into the files under src/main/templates, which
+// is where neoforge.mods.toml lives so that versions are declared once here
+// rather than duplicated in the metadata.
+var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
+    var replaceProperties = [
+            minecraft_version      : minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            neo_version            : neo_version,
+            loader_version_range   : loader_version_range,
+            mod_id                 : mod_id,
+            mod_name               : mod_name,
+            mod_license            : mod_license,
+            mod_version            : mod_version,
+            yacl_min_version       : yacl_min_version,
+    ]
+    inputs.properties replaceProperties
+    expand replaceProperties
+    from "src/main/templates"
+    into "build/generated/sources/modMetadata"
+}
+sourceSets.main.resources.srcDir generateModMetadata
+neoForge.ideSyncTask generateModMetadata
+
+publishing {
+    publications {
+        register("mavenJava", MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            url "file://${project.projectDir}/repo"
+        }
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = "UTF-8"
+}
+
+// IDEA no longer downloads sources/javadoc jars for dependencies on its own.
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}
