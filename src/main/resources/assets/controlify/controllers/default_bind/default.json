@@ -1,0 +1,28 @@
+{
+  "defaults": {
+    "do_a_barrel_roll:thrust_forward": {
+      "axis": "controlify:axis/left_stick_up"
+    },
+    "do_a_barrel_roll:thrust_backward": {
+      "axis": "controlify:axis/left_stick_down"
+    },
+    "do_a_barrel_roll:yaw_left": {
+      "axis": "controlify:axis/left_stick_left"
+    },
+    "do_a_barrel_roll:yaw_right": {
+      "axis": "controlify:axis/left_stick_right"
+    },
+    "do_a_barrel_roll:pitch_up": {
+      "axis": "controlify:axis/right_stick_up"
+    },
+    "do_a_barrel_roll:pitch_down": {
+      "axis": "controlify:axis/right_stick_down"
+    },
+    "do_a_barrel_roll:roll_left": {
+      "axis": "controlify:axis/right_stick_left"
+    },
+    "do_a_barrel_roll:roll_right": {
+      "axis": "controlify:axis/right_stick_right"
+    }
+  }
+}

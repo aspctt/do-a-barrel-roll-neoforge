@@ -1,0 +1,313 @@
+config.do_a_barrel_roll:
+  title: §lDo a Barrel Roll
+  general:
+    .: General
+    mod_enabled: Mod Habilitado
+    mod_enabled.description: > 
+      Habilita o deshabilita completamente el mod. 
+      También se puede alternar usando %1$s en el juego.
+  controls:
+    .: Controles
+    switch_roll_and_yaw: Cambiar Balanceo y Désvio
+    switch_roll_and_yaw.description: >
+      Cambia el eje de balanceo y désvio al usar el mouse para que esté más en línea con el movimiento vanilla. 
+      Esto no se recomienda para la mejor experiencia™, pero podría facilitar el vuelo para algunas personas.
+    momentum_based_mouse: Usar Mouse Basado en el Momentum
+    momentum_based_mouse.description: > 
+      Facilita los movimientos continuos con el mouse, 
+      aunque puede llevar algo de tiempo acostumbrarse.
+    show_momentum_widget: Mostrar Widget de momentum del Mouse
+    show_momentum_widget.description: > 
+      Convierte la mira en un widget útil cuando se utiliza el mouse basado en el momentum.
+      La longitud de la línea indica la cantidad de potencia de giro aplicada en una dirección determinada.
+    momentum_mouse_deadzone: Zona Muerta del Mouse Basado en el momentum
+    momentum_mouse_deadzone.description: >
+      Especifica una zona muerta al usar el mouse basado en el momentum.
+      Esto puede facilitar el vuelo recto, pero valores más altos dificultarán los ajustes sutiles.
+    activation_behaviour:
+      .: Metedos de Activación
+      vanilla: Vanilla
+      triple_jump: Triple Salto
+      hybrid: Híbrido
+      hybrid_toggle: Alternar Híbrido
+      description:
+        .: |+
+          Configurar se activa la Elytra.
+        
+
+        vanilla: >
+          §lVanilla§r: Igual que vanilla, salta una vez sin tocar el suelo.
+        triple_jump: >
+          §lTriple Salto§r: Requiere que saltes dos veces estando en el suelo en lugar de una vez. 
+          Puede ser útil para evitar que tu elytra se active mientras saltas corriendo.
+        hybrid: >
+          §lHíbrido§r: Saltar una vez estando en el suelo activa el vuelo estándar de vanilla, 
+          saltar nuevamente después de eso habilita el mod y desbloquea el eje de balanceo. 
+          Requiere un poco de práctica, pero puede ser útil al despegar en espacios reducidos.
+        hybrid_toggle: >
+          §lAlternar Híbrido§r: Igual que el modo Híbrido, pero saltar activa y desactiva el mod y el eje de balanceo en lugar
+          de solo habilitarlo una vez, lo que te permite alternar el mod en el vuelo.(Literalmente)
+    invert_pitch: Invertir Ángulo
+    invert_pitch.description: >
+      Invierte el ángulo al volar con el mouse.
+    disable_when_submerged: Deshabiitar cuando sumergido
+    disable_when_submerged.description: >
+      Desactiva el mod mientras estás bajo el agua.
+      Se recomienda mantener esto habilitado para evitar la pérdida de control mientras nadas.
+  hud:
+    .: HUD
+    show_horizon: Mostrar Widget del Horizonte
+    show_horizon.description: Muestra un widget del horizonte alrededor de tu mira.
+  banking:
+    .: Opciones de vuelo
+    enable_banking: Habilitar Banking
+    enable_banking.description: > 
+      Agrega un ligero désvio continuo basado en tu balanceo actual.
+      Crea una sensación más realista, similar a la de un avión, mientras vuelas,
+      permitiéndote hacer giros sin tener que hacer giros completos de 90 grados.
+    banking_strength: Fuerza de Banking
+    simulate_control_surface_efficacy: Simular Eficacia de Superficie de Control
+    simulate_control_surface_efficacy.description: >
+      Intenta simular la autoridad variable de diferentes superficies de control basado en tu ángulo de ataque actual.
+      Esto es experimental y está sujeto a cambios en el futuro, pero podría mejorar tu experiencia de vuelo.
+  thrust:
+    .: Opciones de Impulso
+    enable_thrust: Habilitar impulso
+    enable_thrust.description: >
+      Permite a los jugadores usar las teclas de avance y retroceso (W y S por defecto) 
+      para acelerar y desacelerar infinitamente respectivamente.
+      
+      §4Esta función está deshabilitada en cualquier servidor que no lo permita explícitamente.
+    max_thrust: Velocidad Máxima de Impulso
+    max_thrust.description: >
+      La velocidad máxima que se puede alcanzar al acelerar.
+      Configurar esto en cualquier valor por encima de 2-3 podría causar
+      problemas con la carga lenta de los Chunks.
+    thrust_acceleration: Aceleración del Impulso
+    thrust_acceleration.description: >
+      La aceleración del impulso. 
+      Valores más altos harán más fácil alcanzar la velocidad máxima.
+    thrust_particles: Mostrar particulas de impulso
+  misc:
+    .: Micelaneos
+    enable_easter_eggs: Activate Easter Eggs
+  sensitivity: Sensibilidad
+  smoothing:
+    .: Suavizado
+    suavizado_habilitado: Habilitar Suavizado
+    suavizado_inclinacion: Inclinación
+    suavizado_desvio: Desvío
+    suavizado_balanceo: Balanceo
+  desktop:
+    .: Sensibilidad del Ratón y Teclado
+    pitch: Inclinación
+    yaw: Desvío
+    roll: Balanceo
+  controller:
+    .: Sensibilidad del Controlador
+    description: Solo aplicable cuando Controlify está instalado.
+    pitch: Inclinación
+    yaw: Désvio
+    roll: Balanceo
+  server:
+    .: Servidor
+    description: §lEstas configuraciones se aplican en todo el servidor y solo pueden ser modificadas por operadores.
+    force_enabled: Fuerza Habilitado
+    force_enabled.description: >
+      Fuerza que el mod esté habilitado para todos los jugadores en el servidor. 
+      Esto deshabilitará la alternancia del lado del cliente y algunos comportamientos de activación.
+    force_installed: Forzar el mod
+    force_installed.description: >
+      Obliga a que el mod esté instalado para todos los jugadores en el servidor.
+      Esto expulsará a cualquier jugador que no tenga el mod cargado.
+    installed_timeout: Tiempo de espera de verificación de instalación
+    installed_timeout.description: >
+      La cantidad de tiempo en segundos que el servidor esperará a que un cliente responda al saludo antes de expulsarlo.
+      §lAumenta esto si los jugadores con conexiones lentas están siendo expulsados a pesar de tener el mod instalado.
+  gameplay:
+    .: Jugabilidad
+    allow_thrusting: Permitir Aceleración
+    allow_thrusting.description: >
+      Permite a los jugadores usar las teclas de avance y retroceso (W y S por defecto) 
+      para acelerar y desacelerar infinitamente respectivamente.
+    kinetic_damage:
+      .: Tipo de daño cinetico
+      vanilla: Vanilla
+      high_speed: Alta Velocidad
+      none: Ninguno
+      instant_kill: Muerte Instantánea
+      description:
+        .: |+
+          Configura cómo se activa el Elytra.
+
+
+        vanilla: >
+          §lVanilla§r: Igual que vanilla.
+        high_speed: >
+          §lAlta Velocidad§r: Solo aplica daño cinético a una velocidad significativamente mayor.
+        none: >
+          §lNinguno§r: Desactiva completamente el daño cinético.
+        instant_kill: >
+          lInsta-kill§r: Mata instantáneamente al jugador cuando choca contra una pared.
+  advanced:
+    .: Avanzado
+    description: §lEstas configuraciones te permiten modificar ciertos cálculos utilizados para el vuelo, y se recomiendan solo para usuarios avanzados.
+  banking_math:
+    .: Calculos de Banking
+    banking_x_formula: Banking X Función
+    banking_x_formula.description: |
+      §7Esta expresión se utiliza para calcular la cantidad de desvío absoluto que se aplica cuando se habilita el banking.
+      Por defecto, esto se basa en el pitch y roll actuales del jugador, y en la fuerza de banking configurada.
+      
+      Nota: El desvío absoluto en este caso significa el desvío que se aplica como si el roll del jugador fuera cero.
+      
+      Variables adicionales:
+        - §f$§afuerza_banking§7: La fuerza de banking configurada.
+    banking_y_formula: Banking y Función
+    banking_y_formula.description: |
+      §7Esta expresión se utiliza para calcular la cantidad de inclinación absoluta que se aplica cuando se habilita el banking.
+      Por defecto, esto se basa en la inclinación y el balanceo actuales del jugador, y en la fuerza de banking configurada.
+      
+      Nota: La inclinación absoluta en este caso significa la inclinación que se aplica como si el balanceo del jugador fuera cero.
+      
+      Variables adicionales:
+        - §f$§afuerza_banking§7: La fuerza de banking configurada.
+  control_surface_efficacy:
+    .: Cálculos de Eficacia de Superficie de Control
+    elevator: Elevador (Ángulo)
+    elevator.description: >
+      §7Esta expresión se utiliza para calcular la eficacia de la superficie de control del elevador.
+      Por defecto, esto se basa en el ángulo de ataque estimado de la superficie de control.
+    aileron: Alerón (Balanceo)
+    aileron.description: >
+      §7Esta expresión se utiliza para calcular la eficacia de la superficie de control del alerón.
+      Por defecto, esto se basa en el ángulo de ataque estimado de la superficie de control.
+    rudder: Timón (Desvío)
+    rudder.description: >
+      §7Esta expresión se utiliza para calcular la eficacia de la superficie de control del timón.
+      Por defecto, esto se basa en el ángulo de ataque estimado de la superficie de control.
+  documentation:
+    .: Documentación
+    description: |-
+      §7Las expresiones anteriores utilizan un lenguaje de expresiones personalizado que te permite usar variables y funciones en tus cálculos.
+      
+      
+      Para operaciones matemáticas básicas, puedes utilizar los operadores estándar: §d+§7, §d-§7, §d*§7, §d/§7 y §d^§7 para la potenciación.
+      El orden de cálculo sigue la regla PEMDAS, por lo que puedes utilizar paréntesis para agrupar operaciones.
+      
+      
+      Además de eso, hay tres tipos de expresiones con nombre que puedes utilizar:
+        - §f$§avariables§7: Estas comienzan con un §f$§7 y contienen valores dinámicos.
+        - §efunciones§f()§7: Estos son nombres seguidos de paréntesis y toman argumentos dentro de los paréntesis.
+        - §6CONSTANTES§7: Estos son nombres que no son variables ni funciones y se reemplazan por un valor constante.
+      
+      
+      Expande las categorías a continuación para ver las variables, funciones y constantes disponibles.
+    get_help:
+      .: Obtén ayuda en Discord
+      text: ABRIR
+      confirm: ¿Deseas abrir este enlace de invitación de Discord en tu navegador?
+  variables_documentation:
+    .: Variables
+    description: |-
+      §7Las siguientes variables estan disponibles:
+        - §f$§apitch§7: El ángulo de inclinación actual del jugador, en grados.
+        - §f$§ayaw§7: El ángulo de dirección actual del jugador, en grados.
+        - §f$§aroll§7: El ángulo de balanceo actual del jugador, en grados.
+        - §f$§avelocity_length§7: La velocidad actual del jugador, en bloques por tick.
+        - §f$§avelocity_x§7: La velocidad actual del jugador en el eje X, en bloques por tick.
+        - §f$§avelocity_y§7: La velocidad actual del jugador en el eje Y, en bloques por tick.
+        - §f$§avelocity_z§7: La velocidad actual del jugador en el eje Z, en bloques por tick.
+        - §f$§alook_x§7: El vector de mira actual del jugador en el eje X.
+        - §f$§alook_y§7: El vector de mira actual del jugador en el eje Y.
+        - §f$§alook_z§7: El vector de mira actual del jugador en el eje Z.
+  functions_documentation:
+    .: Funciones
+    description: |-
+      §7Las siguientes funciones estan disponibles:
+        - §esqrt§f(x)§7: Devuelve la raíz cuadrada de x.
+        - §esin§f(x)§7: Devuelve el seno de x.
+        - §ecos§f(x)§7: Devuelve el coseno de x.
+        - §etan§f(x)§7: Devuelve la tangente de x.
+        - §easin§f(x)§7: Devuelve el arcoseno de x.
+        - §eacos§f(x)§7: Devuelve el arcocoseno de x.
+        - §eatan§f(x)§7: Devuelve el arcotangente de x.
+        - §eabs§f(x)§7: Devuelve el valor absoluto de x.
+        - §eciel§f(x)§7: Devuelve el entero más pequeño mayor o igual a x.
+        - §efloor§f(x)§7: Devuelve el entero más grande menor o igual a x.
+        - §eround§f(x)§7: Devuelve el entero más cercano a x.
+        - §elog§f(x)§7: Devuelve el logaritmo natural de x.
+        - §erandint§f(max)§7: Devuelve un número entero aleatorio entre 0 y max.
+        - §erandint§f(min, max)§7: Devuelve un número entero aleatorio entre min y max.
+        - §emin§f(x, y)§7: Devuelve el menor entre x e y.
+        - §emax§f(x, y)§7: Devuelve el mayor entre x e y.
+  constants_documentation:
+    .: Constantes
+    description: |-
+      §7Las siguientes constantes están disponibles:
+        - §6PI§7: El valor de pi.
+        - §6E§7: El valor de e.
+        - §6TO_RAD§7: El factor de conversión de grados a radianes.
+        - §6TO_DEG§7: El factor de conversión de radianes a grados.
+      
+
+  yacl:
+    missing:
+      .: Yet Another Config Lib no está instalado
+      message: Se requiere YACL 3 para editar la configuración en el juego, ¿deseas instalar YACL 3?
+    outdated:
+      .: Yet Another Config Lib está desactualizado
+      message: Se requiere la última versión de YACL 3 para editar la configuración en el juego, ¿desea actualizar YACL 3?
+
+
+category.do_a_barrel_roll.do_a_barrel_roll:
+  .: Do a Barrel Roll
+  movement: Movimient de Do a Barrel Roll
+key.do_a_barrel_roll:
+  toggle_enabled:
+    .: Alternar Habilitado
+    enable: §aHabilitado §rDo a Barrel Roll
+    disable: §cDeshabilitado §rDo a Barrel Roll
+    disallowed: §cNo puedes deshabilitar Do a Barrel Roll en este servidor
+  toggle_thrust:
+    .: Alternar Impulso
+    enable: §aHabilitado §rImpulso
+    disable: §cDeshabilitado §rImpulso
+    disallowed: §cNo puedes usar impulso en este servidor
+  open_config: Abrir Configuración
+
+  pitch_up: Subir Ángulo
+  pitch_down: Bajar Ángulo
+  yaw_left: Girar Izquierda
+  yaw_right: Girar Derecha
+  roll_left: Inclinar Izquierda
+  roll_right: Inclinar Derecha
+  thrust_forward: Empuje Adelante
+  thrust_backward: Empuje Atrás
+
+
+toast.do_a_barrel_roll:
+  .: Do a Barrel Roll
+  thrusting_disabled_by_server: >-
+    §cEl impulso de la Elytra no está permitido en este servidor, la función será desactivada de forma forzada. 
+    Desactívala en la configuración de tu cliente para eliminar este mensaje.
+  mod_forced_enabled_by_server: >-
+    Este mod está habilitado de forma forzada por este servidor,
+    la alternancia del lado del cliente y algunos comportamientos de activación estarán desactivados.
+  server_config_updated: >-
+    La configuración del servidor se actualizó correctamente, enviando la nueva configuración a todos los jugadores.
+  server_config_update_failed: >-
+    Fallo al actualizar la configuración del servidor, por favor revisa los registros del servidor para obtener más información.
+
+
+controlify:
+  category.do_a_barrel_roll.do_a_barrel_roll: Do a Barrel Roll
+  bind.do_a_barrel_roll:
+    pitch_up: Subir Ángulo
+    pitch_down: Bajar Ángulo
+    yaw_left: Girar Izquierda
+    yaw_right: Girar Derecha
+    roll_left: Inclinar Izquierda
+    roll_right: Inclinar Derecha
+    thrust_forward: Empuje Adelante
+    thrust_backward: Empuje Atrás

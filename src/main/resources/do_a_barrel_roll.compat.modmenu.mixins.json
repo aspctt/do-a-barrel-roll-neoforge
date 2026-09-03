@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "nl.enjarai.doabarrelroll.compat.modmenu.mixin",
+  "plugin": "nl.enjarai.doabarrelroll.compat.modmenu.ModMenuPlugin",
+  "refmap": "do_a_barrel_roll.refmap.json",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "ModsScreenMixin"
+  ],
+  "mixins": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,0 +1,38 @@
+name: Build
+
+on:
+  workflow_call:
+    inputs:
+      branch:
+        required: true
+        type: string
+      java_version:
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Branch
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ inputs.branch }}
+
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: ${{ inputs.java_version }}
+
+      - name: Grant Execute Permiussion
+        run: chmod +x gradlew
+
+      - name: Build
+        run: ./gradlew chiseledBuildAndCollect
+
+      - name: Upload To Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Artifacts
+          path: ./build/libs/
