@@ -21,6 +21,7 @@ public final class InputContextImpl implements InputContext {
     private final ResourceLocation id;
     private final Supplier<Boolean> activeCondition;
     private final List<KeyMapping> keyBindings = new ReferenceArrayList<>();
+    private boolean active;
 
     public InputContextImpl(ResourceLocation id, Supplier<Boolean> activeCondition) {
         this.id = id;
@@ -34,12 +35,22 @@ public final class InputContextImpl implements InputContext {
     }
 
     /**
-     * Called by NeoForge from {@link KeyMapping#isDown()} on every query, so this
-     * stays a direct read of the condition rather than something cached per tick.
+     * Re-reads the condition. Called once per client tick, matching upstream,
+     * which evaluated the same condition on its own tick rather than per query.
+     */
+    public void tick() {
+        active = activeCondition.get();
+    }
+
+    /**
+     * NeoForge asks this from {@link KeyMapping#isDown()}, which is a much hotter
+     * path than the key events upstream gated on, and the condition behind it
+     * walks a roll group's list of conditions. Hence the cached field: the answer
+     * cannot change within a tick anyway.
      */
     @Override
     public boolean isActive() {
-        return activeCondition.get();
+        return active;
     }
 
     /**

@@ -6,6 +6,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import nl.enjarai.doabarrelroll.api.RollEntity;
 import nl.enjarai.doabarrelroll.api.RollMouse;
 import nl.enjarai.doabarrelroll.config.ModConfig;
+import nl.enjarai.doabarrelroll.impl.key.InputContextImpl;
 import nl.enjarai.doabarrelroll.render.HorizonLineWidget;
 import nl.enjarai.doabarrelroll.render.MomentumCrosshairWidget;
 import nl.enjarai.doabarrelroll.util.StarFoxUtil;
@@ -13,6 +14,8 @@ import org.joml.Vector2d;
 
 public class EventCallbacksClient {
     public static void clientTick(Minecraft client) {
+        InputContextImpl.getContexts().forEach(InputContextImpl::tick);
+
         if (!DoABarrelRollClient.isFallFlying()) {
             DoABarrelRollClient.clearValues();
         }
