@@ -2,10 +2,10 @@
 
 ![Version](https://img.shields.io/badge/Available_for-1.21.1-blue)
 ![Mod Loader](https://img.shields.io/badge/Mod_Loader-NeoForge-orange)
-![Dependencies](https://img.shields.io/badge/Dependencies-None-brightgreen)
+![Requires](https://img.shields.io/badge/Requires-Nothing-brightgreen)
 ![License](https://img.shields.io/badge/License-GPL--3.0-red)
 
-**A native NeoForge port of enjarai's Do a Barrel Roll.** Same mod, different name because CurseForge does not allow a loader in a project title. It shares a mod id with the original, so the two cannot be installed together.
+**A native NeoForge port of enjarai's Do a Barrel Roll.**
 
 Do a Barrel Roll is a lightweight, mostly clientside mod that changes elytra flight to be more fun and semi-realistic. It redesigns movement around a completely unlocked camera, giving you full pitch, yaw and roll control in flight, along with camera modifiers like smoothing and banking.
 
