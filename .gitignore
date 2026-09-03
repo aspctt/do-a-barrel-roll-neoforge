@@ -1,38 +1,62 @@
-# gradle
+###############################################################################
+# Do a Barrel Roll (NeoForge) - .gitignore for a Java / NeoForge Minecraft mod
+###############################################################################
 
-.gradle/
+## Gradle build output
 build/
-out/
-classes/
+.gradle/
+gradletasknamecache
+gradle-app.setting
 
-# eclipse
+# gradle/wrapper/gradle-wrapper.jar is intentionally TRACKED. It is what lets a
+# fresh clone run ./gradlew without Gradle installed, so never add a blanket
+# *.jar rule here.
 
-*.launch
+## Local maven repository, written by the publishing block in build.gradle
+repo/
 
-# idea
-
+## IDE / editor cruft
 .idea/
+.vscode/
+.vs/
+out/
 *.iml
 *.ipr
 *.iws
-
-# vscode
-
 .settings/
-.vscode/
-bin/
+.metadata/
 .classpath
 .project
+bin/
+eclipse/
+*.launch
 
-# macos
+## OS cruft
+.DS_Store
+Thumbs.db
+desktop.ini
 
-*.DS_Store
-
-# fabric
-
+## Development runtime
+# Produced by launching the game: worlds, logs, crash reports, options, and the
+# generated config files. A world save in particular would be both large and
+# meaningless to anyone else.
 run/
-.fabric
+runs/
+run-data/
 
-*.old
+## Crash artefacts, wherever they land
+crash-reports/
+*.hprof
+hs_err_pid*.log
 
+###############################################################################
+# Local-only material. NOT for publication.
+#
+# Source artwork, store listing copy, and any third-party mod binaries kept
+# locally so development runs can load them. Other people's work under other
+# people's licences, several of which forbid redistribution.
+#
+# Remove an entry only if you deliberately intend to publish it.
+###############################################################################
 external-files/
+NOTES.md

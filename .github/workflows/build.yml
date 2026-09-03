@@ -14,25 +14,28 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Branch
-        uses: actions/checkout@v2
+      - name: Checkout branch
+        uses: actions/checkout@v4
         with:
           ref: ${{ inputs.branch }}
 
-      - name: Setup Java
-        uses: actions/setup-java@v2
+      - name: Set up Java
+        uses: actions/setup-java@v4
         with:
-          distribution: 'adopt'
+          distribution: temurin
           java-version: ${{ inputs.java_version }}
 
-      - name: Grant Execute Permiussion
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
       - name: Build
-        run: ./gradlew chiseledBuildAndCollect
+        run: ./gradlew build
 
-      - name: Upload To Artifacts
+      - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: Artifacts
-          path: ./build/libs/
+          path: build/libs/
