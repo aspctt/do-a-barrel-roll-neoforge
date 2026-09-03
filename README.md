@@ -1,6 +1,6 @@
 <img style="text-align:center" src="img/banner.png">
 
-# <p align=center> Do a Barrel Roll (NeoForge) </p>
+# <p align=center> Do Another Barrel Roll </p>
 
 ![Version](https://img.shields.io/badge/Available_for-1.21.1-blue)
 ![Mod Loader](https://img.shields.io/badge/Mod_Loader-NeoForge-orange)
@@ -9,9 +9,11 @@
 
 ## Description
 
+**Do Another Barrel Roll is a native NeoForge port of [enjarai's Do a Barrel Roll](https://github.com/enjarai/do-a-barrel-roll).** Same mod, different name because CurseForge does not allow a loader in a project title. It shares the mod id `do_a_barrel_roll` with the original, so the two cannot be installed together.
+
 Do a Barrel Roll is a lightweight, mostly clientside mod that changes elytra flight to be more fun and semi-realistic. It redesigns movement around a completely unlocked camera, giving you full pitch, yaw and roll control in flight, plus a set of subtle and less subtle camera modifiers including smoothing and banking.
 
-This is a **native NeoForge port** of [enjarai's Do a Barrel Roll](https://github.com/enjarai/do-a-barrel-roll). Upstream ships a NeoForge build, but it is the Fabric jar running through Sinytra Connector and it requires both Connector and the Forgified Fabric API to work. This fork is written against NeoForge directly:
+Upstream ships a NeoForge build, but it is the Fabric jar running through Sinytra Connector and it requires both Connector and the Forgified Fabric API to work. This port is written against NeoForge directly:
 
 * No Sinytra Connector, no Fabric API, no Forgified Fabric API.
 * No CICADA, no Mod Menu, no Fabric permissions API.
