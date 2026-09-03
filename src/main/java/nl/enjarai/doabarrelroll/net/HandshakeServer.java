@@ -1,10 +1,9 @@
 package nl.enjarai.doabarrelroll.net;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayNetworkHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
+import net.minecraft.server.level.ServerPlayer;
 import nl.enjarai.doabarrelroll.DoABarrelRoll;
 import nl.enjarai.doabarrelroll.config.LimitedModConfigServer;
 import nl.enjarai.doabarrelroll.config.ModConfigServer;
@@ -22,13 +21,13 @@ public class HandshakeServer<P extends ConfigSyncS2CPacket> {
 
     private final PacketConstructor<P> packetConstructor;
     private final ServerConfigHolder configHolder;
-    private final Map<ServerPlayNetworkHandler, ClientInfo> syncStates = new WeakHashMap<>();
-    private final Map<ServerPlayNetworkHandler, DelayedRunnable> scheduledKicks = new WeakHashMap<>();
-    private final Function<ServerPlayNetworkHandler, Boolean> getsLimitedCheck;
+    private final Map<ServerGamePacketListenerImpl, ClientInfo> syncStates = new WeakHashMap<>();
+    private final Map<ServerGamePacketListenerImpl, DelayedRunnable> scheduledKicks = new WeakHashMap<>();
+    private final Function<ServerGamePacketListenerImpl, Boolean> getsLimitedCheck;
     private final Codec<ModConfigServer> transferCodec = ModConfigServer.CODEC;
     private final Codec<LimitedModConfigServer> limitedTransferCodec = LimitedModConfigServer.getCodec();
 
-    public HandshakeServer(PacketConstructor<P> packetConstructor, ServerConfigHolder configHolder, Function<ServerPlayNetworkHandler, Boolean> getsLimitedCheck) {
+    public HandshakeServer(PacketConstructor<P> packetConstructor, ServerConfigHolder configHolder, Function<ServerGamePacketListenerImpl, Boolean> getsLimitedCheck) {
         this.packetConstructor = packetConstructor;
         this.configHolder = configHolder;
         this.getsLimitedCheck = getsLimitedCheck;
@@ -46,15 +45,15 @@ public class HandshakeServer<P extends ConfigSyncS2CPacket> {
         }
     }
 
-    public ClientInfo getHandshakeState(ServerPlayerEntity player) {
-        return getHandshakeState(player.networkHandler);
+    public ClientInfo getHandshakeState(ServerPlayer player) {
+        return getHandshakeState(player.connection);
     }
 
-    public ClientInfo getHandshakeState(ServerPlayNetworkHandler handler) {
+    public ClientInfo getHandshakeState(ServerGamePacketListenerImpl handler) {
         return syncStates.computeIfAbsent(handler, key -> new ClientInfo(HandshakeState.NOT_SENT, PROTOCOL_VERSION, true));
     }
 
-    public P initiateConfigSync(ServerPlayNetworkHandler handler) {
+    public P initiateConfigSync(ServerGamePacketListenerImpl handler) {
         var isLimited = getsLimitedCheck.apply(handler);
         getHandshakeState(handler).isLimited = isLimited;
         var config = configHolder.instance;
@@ -62,7 +61,7 @@ public class HandshakeServer<P extends ConfigSyncS2CPacket> {
         return packetConstructor.construct(PROTOCOL_VERSION, config, isLimited, isLimited ? ModConfigServer.DEFAULT : config);
     }
 
-    public void configSentToClient(ServerPlayNetworkHandler handler) {
+    public void configSentToClient(ServerGamePacketListenerImpl handler) {
         getHandshakeState(handler).state = HandshakeState.SENT;
 
         var config = configHolder.instance;
@@ -79,7 +78,7 @@ public class HandshakeServer<P extends ConfigSyncS2CPacket> {
         }
     }
 
-    public HandshakeState clientReplied(ServerPlayNetworkHandler handler, ConfigResponseC2SPacket packet) {
+    public HandshakeState clientReplied(ServerGamePacketListenerImpl handler, ConfigResponseC2SPacket packet) {
         var info = getHandshakeState(handler);
         var player = handler.getPlayer();
 
@@ -112,7 +111,7 @@ public class HandshakeServer<P extends ConfigSyncS2CPacket> {
         return info.state;
     }
 
-    public void playerDisconnected(ServerPlayNetworkHandler handler) {
+    public void playerDisconnected(ServerGamePacketListenerImpl handler) {
         syncStates.remove(handler);
     }
 

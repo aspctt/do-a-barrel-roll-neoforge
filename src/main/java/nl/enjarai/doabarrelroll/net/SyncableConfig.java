@@ -1,12 +1,12 @@
 package nl.enjarai.doabarrelroll.net;
 
-import net.minecraft.server.network.ServerPlayNetworkHandler;
-import net.minecraft.text.Text;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
+import net.minecraft.network.chat.Component;
 
 public interface SyncableConfig<T, L> {
     Integer getSyncTimeout();
 
-    Text getSyncTimeoutMessage();
+    Component getSyncTimeoutMessage();
 
-    L getLimited(ServerPlayNetworkHandler handler);
+    L getLimited(ServerGamePacketListenerImpl handler);
 }

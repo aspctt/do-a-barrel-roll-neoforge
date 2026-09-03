@@ -5,9 +5,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 import nl.enjarai.doabarrelroll.DoABarrelRoll;
 import nl.enjarai.doabarrelroll.config.ModConfigServer;
 import nl.enjarai.doabarrelroll.net.packet.ConfigUpdateAckS2CPacket;
@@ -83,10 +82,10 @@ public class ServerConfigHolder<P extends ConfigUpdateAckS2CPacket> {
         }
     }
 
-    public P clientSendsUpdate(ServerPlayerEntity player, ConfigUpdateC2SPacket packet) {
+    public P clientSendsUpdate(ServerPlayer player, ConfigUpdateC2SPacket packet) {
         var info = handshakeServer.getHandshakeState(player);
         var accepted = info.state == HandshakeServer.HandshakeState.ACCEPTED;
-        var hasPermission = ModConfigServer.canModify(player.networkHandler);
+        var hasPermission = ModConfigServer.canModify(player.connection);
 
         // Only players that have accepted the handshake and have permission can update the config
         if (!accepted || !hasPermission) {

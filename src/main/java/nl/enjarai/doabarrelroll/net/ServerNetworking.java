@@ -1,23 +1,22 @@
 package nl.enjarai.doabarrelroll.net;
 
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.entity.Entity;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.neoforged.fml.loading.FMLPaths;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.registration.NetworkRegistry;
 import nl.enjarai.doabarrelroll.DoABarrelRoll;
 import nl.enjarai.doabarrelroll.api.RollEntity;
 import nl.enjarai.doabarrelroll.api.event.ServerEvents;
 import nl.enjarai.doabarrelroll.config.ModConfigServer;
-import nl.enjarai.doabarrelroll.net.packet.*;
+import nl.enjarai.doabarrelroll.net.packet.ConfigSyncS2CPacket;
+import nl.enjarai.doabarrelroll.net.packet.ConfigUpdateAckS2CPacket;
+import nl.enjarai.doabarrelroll.net.packet.RollSyncS2CPacket;
 
 public class ServerNetworking {
     public static final ServerConfigHolder<ConfigUpdateAckS2CPacket> CONFIG_HOLDER = new ServerConfigHolder<>(
-            FabricLoader.getInstance().getConfigDir().resolve(DoABarrelRoll.MODID + "-server.json"),
+            FMLPaths.CONFIGDIR.get().resolve(DoABarrelRoll.MODID + "-server.json"),
             ModConfigServer.CODEC, ConfigUpdateAckS2CPacket::new, ServerEvents::updateServerConfig
     );
     public static final HandshakeServer<ConfigSyncS2CPacket> HANDSHAKE_SERVER = new HandshakeServer<>(
@@ -26,66 +25,54 @@ public class ServerNetworking {
     public static void init() {
         CONFIG_HOLDER.setHandshakeServer(HANDSHAKE_SERVER);
 
-        PayloadTypeRegistry.playC2S().register(ConfigResponseC2SPacket.PACKET_ID, ConfigResponseC2SPacket.PACKET_CODEC);
-        PayloadTypeRegistry.playC2S().register(ConfigUpdateC2SPacket.PACKET_ID, ConfigUpdateC2SPacket.PACKET_CODEC);
-        PayloadTypeRegistry.playC2S().register(RollSyncC2SPacket.PACKET_ID, RollSyncC2SPacket.PACKET_CODEC);
-
-        PayloadTypeRegistry.playS2C().register(ConfigSyncS2CPacket.PACKET_ID, ConfigSyncS2CPacket.PACKET_CODEC);
-        PayloadTypeRegistry.playS2C().register(ConfigUpdateAckS2CPacket.PACKET_ID, ConfigUpdateAckS2CPacket.PACKET_CODEC);
-        PayloadTypeRegistry.playS2C().register(RollSyncS2CPacket.PACKET_ID, RollSyncS2CPacket.PACKET_CODEC);
-
-        ServerPlayNetworking.registerGlobalReceiver(ConfigResponseC2SPacket.PACKET_ID, (payload, context) -> {
-            var reply = HANDSHAKE_SERVER.clientReplied(context.player().networkHandler, payload);
-            if (reply == HandshakeServer.HandshakeState.RESEND) {
-                // Resending can happen when the client has a different protocol version than expected.
-                sendHandshake(context.player());
-            } else if (reply == HandshakeServer.HandshakeState.ACCEPTED) {
-                // Init roll syncing
-                ServerPlayNetworking.registerReceiver(context.player().networkHandler, RollSyncC2SPacket.PACKET_ID, (payload1, context1) -> {
-                    var rollPlayer = (RollEntity) context1.player();
-
-                    var isRolling = payload1.rolling();
-                    var roll = payload1.roll();
-
-                    rollPlayer.doABarrelRoll$setRolling(isRolling);
-                    rollPlayer.doABarrelRoll$setRoll(isRolling ? MathHelper.wrapDegrees(roll) : 0);
-                });
-
-                // Init client -> server config update
-                ServerPlayNetworking.registerReceiver(context.player().networkHandler, ConfigUpdateC2SPacket.PACKET_ID, (payload1, context1) -> {
-                    context1.responseSender().sendPacket(CONFIG_HOLDER.clientSendsUpdate(context1.player(), payload1));
-                });
-            }
-        });
-        // The initial handshake is sent in the CommandManagerMixin.
-
         ServerEvents.SERVER_CONFIG_UPDATE.register((server, config) -> {
-            for (var player : server.getPlayerManager().getPlayerList()) {
+            for (var player : server.getPlayerList().getPlayers()) {
                 sendHandshake(player);
             }
         });
-
-        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
-            HANDSHAKE_SERVER.playerDisconnected(handler);
-        });
-        ServerTickEvents.END_SERVER_TICK.register(HANDSHAKE_SERVER::tick);
     }
 
-    public static void sendHandshake(ServerPlayerEntity player) {
-        ServerPlayNetworking.send(player, HANDSHAKE_SERVER.initiateConfigSync(player.networkHandler));
-        HANDSHAKE_SERVER.configSentToClient(player.networkHandler);
+    public static void sendHandshake(ServerPlayer player) {
+        PacketDistributor.sendToPlayer(player, HANDSHAKE_SERVER.initiateConfigSync(player.connection));
+        HANDSHAKE_SERVER.configSentToClient(player.connection);
     }
 
+    /**
+     * Broadcasts an entity's roll to everyone who can see it and has completed the
+     * handshake.
+     *
+     * <p>NeoForge throws rather than dropping a payload aimed at a client that has
+     * not registered the channel, so the receiver list is filtered here rather than
+     * handed to {@code PacketDistributor.sendToPlayersTrackingEntity}. The
+     * handshake state alone would be enough in practice; the channel check is the
+     * belt to its braces, because being wrong about it disconnects a player.
+     */
     public static void sendRollUpdates(Entity entity) {
+        if (!(entity.level() instanceof ServerLevel level)) {
+            return;
+        }
+
         var rollEntity = (RollEntity) entity;
-        var isRolling = rollEntity.doABarrelRoll$isRolling();
-        var roll = rollEntity.doABarrelRoll$getRoll();
+        var payload = new RollSyncS2CPacket(
+                entity.getId(),
+                rollEntity.doABarrelRoll$isRolling(),
+                rollEntity.doABarrelRoll$getRoll()
+        );
 
-        var payload = new RollSyncS2CPacket(entity.getId(), isRolling, roll);
+        // The same range vanilla tracks an entity at: its type's range in chunks,
+        // capped by the server view distance. Squared, so the comparison below
+        // needs no square root per player.
+        int chunks = Math.min(entity.getType().clientTrackingRange(), level.getServer().getPlayerList().getViewDistance());
+        double range = chunks * 16.0;
+        double rangeSq = range * range;
 
-        PlayerLookup.tracking(entity).stream()
-                .filter(player -> player != entity)
-                .filter(player -> HANDSHAKE_SERVER.getHandshakeState(player).state == HandshakeServer.HandshakeState.ACCEPTED)
-                .forEach(player -> ServerPlayNetworking.send(player, payload));
+        for (var player : level.players()) {
+            if (player == entity) continue;
+            if (player.distanceToSqr(entity) > rangeSq) continue;
+            if (HANDSHAKE_SERVER.getHandshakeState(player).state != HandshakeServer.HandshakeState.ACCEPTED) continue;
+            if (!NetworkRegistry.hasChannel(player.connection, RollSyncS2CPacket.PACKET_ID.id())) continue;
+
+            PacketDistributor.sendToPlayer(player, payload);
+        }
     }
 }
