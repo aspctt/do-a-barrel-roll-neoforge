@@ -1,9 +1,10 @@
 package nl.enjarai.doabarrelroll;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.text.Text;
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
+import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import nl.enjarai.doabarrelroll.api.key.InputContext;
 import nl.enjarai.doabarrelroll.config.LimitedModConfigServer;
 import nl.enjarai.doabarrelroll.config.ModConfig;
@@ -14,76 +15,43 @@ import org.lwjgl.glfw.GLFW;
 import java.util.List;
 
 public class ModKeybindings {
+    private static final String CATEGORY = "category.do_a_barrel_roll.do_a_barrel_roll";
+    private static final String MOVEMENT_CATEGORY = "category.do_a_barrel_roll.do_a_barrel_roll.movement";
 
-    public static final KeyBinding TOGGLE_ENABLED = new KeyBinding(
+    public static final KeyMapping TOGGLE_ENABLED = new KeyMapping(
             "key.do_a_barrel_roll.toggle_enabled",
-            InputUtil.Type.KEYSYM,
+            KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_I,
-            "category.do_a_barrel_roll.do_a_barrel_roll"
+            CATEGORY
     );
-    public static final KeyBinding TOGGLE_THRUST = new KeyBinding(
+    public static final KeyMapping TOGGLE_THRUST = new KeyMapping(
             "key.do_a_barrel_roll.toggle_thrust",
-            InputUtil.Type.KEYSYM,
-            InputUtil.UNKNOWN_KEY.getCode(),
-            "category.do_a_barrel_roll.do_a_barrel_roll"
+            KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM,
+            InputConstants.UNKNOWN.getValue(),
+            CATEGORY
     );
-    public static final KeyBinding OPEN_CONFIG = new KeyBinding(
+    public static final KeyMapping OPEN_CONFIG = new KeyMapping(
             "key.do_a_barrel_roll.open_config",
-            InputUtil.Type.KEYSYM,
-            InputUtil.UNKNOWN_KEY.getCode(),
-            "category.do_a_barrel_roll.do_a_barrel_roll"
+            KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM,
+            InputConstants.UNKNOWN.getValue(),
+            CATEGORY
     );
 
-    public static final KeyBinding PITCH_UP = new KeyBinding(
-            "key.do_a_barrel_roll.pitch_up",
-            InputUtil.Type.KEYSYM,
-            InputUtil.UNKNOWN_KEY.getCode(),
-            "category.do_a_barrel_roll.do_a_barrel_roll.movement"
-    );
-    public static final KeyBinding PITCH_DOWN = new KeyBinding(
-            "key.do_a_barrel_roll.pitch_down",
-            InputUtil.Type.KEYSYM,
-            InputUtil.UNKNOWN_KEY.getCode(),
-            "category.do_a_barrel_roll.do_a_barrel_roll.movement"
-    );
-    public static final KeyBinding YAW_LEFT = new KeyBinding(
-            "key.do_a_barrel_roll.yaw_left",
-            InputUtil.Type.KEYSYM,
-            GLFW.GLFW_KEY_A,
-            "category.do_a_barrel_roll.do_a_barrel_roll.movement"
-    );
-    public static final KeyBinding YAW_RIGHT = new KeyBinding(
-            "key.do_a_barrel_roll.yaw_right",
-            InputUtil.Type.KEYSYM,
-            GLFW.GLFW_KEY_D,
-            "category.do_a_barrel_roll.do_a_barrel_roll.movement"
-    );
-    public static final KeyBinding ROLL_LEFT = new KeyBinding(
-            "key.do_a_barrel_roll.roll_left",
-            InputUtil.Type.KEYSYM,
-            InputUtil.UNKNOWN_KEY.getCode(),
-            "category.do_a_barrel_roll.do_a_barrel_roll.movement"
-    );
-    public static final KeyBinding ROLL_RIGHT = new KeyBinding(
-            "key.do_a_barrel_roll.roll_right",
-            InputUtil.Type.KEYSYM,
-            InputUtil.UNKNOWN_KEY.getCode(),
-            "category.do_a_barrel_roll.do_a_barrel_roll.movement"
-    );
-    public static final KeyBinding THRUST_FORWARD = new KeyBinding(
-            "key.do_a_barrel_roll.thrust_forward",
-            InputUtil.Type.KEYSYM,
-            GLFW.GLFW_KEY_W,
-            "category.do_a_barrel_roll.do_a_barrel_roll.movement"
-    );
-    public static final KeyBinding THRUST_BACKWARD = new KeyBinding(
-            "key.do_a_barrel_roll.thrust_backward",
-            InputUtil.Type.KEYSYM,
-            InputUtil.UNKNOWN_KEY.getCode(),
-            "category.do_a_barrel_roll.do_a_barrel_roll.movement"
-    );
+    // The movement bindings all go into CONTEXT below, which is what lets yaw sit
+    // on the strafe keys without conflicting with them outside of flight.
+    public static final KeyMapping PITCH_UP = movementKey("pitch_up", InputConstants.UNKNOWN.getValue());
+    public static final KeyMapping PITCH_DOWN = movementKey("pitch_down", InputConstants.UNKNOWN.getValue());
+    public static final KeyMapping YAW_LEFT = movementKey("yaw_left", GLFW.GLFW_KEY_A);
+    public static final KeyMapping YAW_RIGHT = movementKey("yaw_right", GLFW.GLFW_KEY_D);
+    public static final KeyMapping ROLL_LEFT = movementKey("roll_left", InputConstants.UNKNOWN.getValue());
+    public static final KeyMapping ROLL_RIGHT = movementKey("roll_right", InputConstants.UNKNOWN.getValue());
+    public static final KeyMapping THRUST_FORWARD = movementKey("thrust_forward", GLFW.GLFW_KEY_W);
+    public static final KeyMapping THRUST_BACKWARD = movementKey("thrust_backward", InputConstants.UNKNOWN.getValue());
 
-    public static final List<KeyBinding> ALL = List.of(
+    public static final List<KeyMapping> ALL = List.of(
             TOGGLE_ENABLED,
             TOGGLE_THRUST,
             OPEN_CONFIG,
@@ -113,15 +81,25 @@ public class ModKeybindings {
         CONTEXT.addKeyBinding(THRUST_BACKWARD);
     }
 
-    public static void clientTick(MinecraftClient client) {
-        while (TOGGLE_ENABLED.wasPressed()) {
+    private static KeyMapping movementKey(String name, int keyCode) {
+        return new KeyMapping(
+                "key.do_a_barrel_roll." + name,
+                KeyConflictContext.IN_GAME,
+                InputConstants.Type.KEYSYM,
+                keyCode,
+                MOVEMENT_CATEGORY
+        );
+    }
+
+    public static void clientTick(Minecraft client) {
+        while (TOGGLE_ENABLED.consumeClick()) {
             if (!ClientNetworking.HANDSHAKE_CLIENT.getConfig().map(LimitedModConfigServer::forceEnabled).orElse(false)) {
                 ModConfig.INSTANCE.setModEnabled(!ModConfig.INSTANCE.getModEnabled());
                 ModConfig.INSTANCE.save();
 
                 if (client.player != null) {
-                    client.player.sendMessage(
-                            Text.translatable(
+                    client.player.displayClientMessage(
+                            Component.translatable(
                                     "key.do_a_barrel_roll." +
                                             (ModConfig.INSTANCE.getModEnabled() ? "toggle_enabled.enable" : "toggle_enabled.disable")
                             ),
@@ -130,21 +108,21 @@ public class ModKeybindings {
                 }
             } else {
                 if (client.player != null) {
-                    client.player.sendMessage(
-                            Text.translatable("key.do_a_barrel_roll.toggle_enabled.disallowed"),
+                    client.player.displayClientMessage(
+                            Component.translatable("key.do_a_barrel_roll.toggle_enabled.disallowed"),
                             true
                     );
                 }
             }
         }
-        while (TOGGLE_THRUST.wasPressed()) {
+        while (TOGGLE_THRUST.consumeClick()) {
             if (ClientNetworking.HANDSHAKE_CLIENT.getConfig().map(LimitedModConfigServer::allowThrusting).orElse(false)) {
                 ModConfig.INSTANCE.setEnableThrust(!ModConfig.INSTANCE.getEnableThrust());
                 ModConfig.INSTANCE.save();
 
                 if (client.player != null) {
-                    client.player.sendMessage(
-                            Text.translatable(
+                    client.player.displayClientMessage(
+                            Component.translatable(
                                     "key.do_a_barrel_roll." +
                                             (ModConfig.INSTANCE.getEnableThrust() ? "toggle_thrust.enable" : "toggle_thrust.disable")
                             ),
@@ -153,15 +131,15 @@ public class ModKeybindings {
                 }
             } else {
                 if (client.player != null) {
-                    client.player.sendMessage(
-                            Text.translatable("key.do_a_barrel_roll.toggle_thrust.disallowed"),
+                    client.player.displayClientMessage(
+                            Component.translatable("key.do_a_barrel_roll.toggle_thrust.disallowed"),
                             true
                     );
                 }
             }
         }
-        while (OPEN_CONFIG.wasPressed()) {
-            client.setScreen(ModConfigScreen.create(client.currentScreen));
+        while (OPEN_CONFIG.consumeClick()) {
+            client.setScreen(ModConfigScreen.create(client.screen));
         }
     }
 }

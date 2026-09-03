@@ -1,6 +1,6 @@
 package nl.enjarai.doabarrelroll.api.event;
 
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import nl.enjarai.doabarrelroll.impl.event.RollGroupImpl;
 
 import java.util.function.Supplier;
@@ -9,7 +9,7 @@ import java.util.function.Supplier;
  * A group of conditions that determine whether the camera should be rolling and what effects should be applied.
  * Instances can be directly used as conditions for registered events.
  *
- * <p>Usually, you'll want to use {@link RollGroup#of(Identifier)} to get an instance of this class.
+ * <p>Usually, you'll want to use {@link RollGroup#of(ResourceLocation)} to get an instance of this class.
  * You can then use {@link RollGroup#trueIf(Supplier)}, {@link RollGroup#falseUnless(Supplier)} or
  * {@link Event#register(Object)} to add conditions.
  *
@@ -19,7 +19,7 @@ import java.util.function.Supplier;
  * <p>A basic example:
  * <pre>{@code
  * class ModClass {
- *     public static final RollGroup ROLL_GROUP = RollGroup.of(new Identifier("my_mod", "my_roll_group"));
+ *     public static final RollGroup ROLL_GROUP = RollGroup.of(ResourceLocation.fromNamespaceAndPath("my_mod", "my_roll_group"));
  *
  *     public static void onInitialize() {
  *         ROLL_GROUP.trueIf(() -> yourCondition);
@@ -41,7 +41,7 @@ public interface RollGroup extends Supplier<Boolean>, Event<RollGroup.RollCondit
      * Gets the RollGroup instance for the given identifier.
      * If no instance exists, a new one is created and registered to {@link RollEvents#SHOULD_ROLL_CHECK}
      */
-    static RollGroup of(Identifier id) {
+    static RollGroup of(ResourceLocation id) {
         return RollGroupImpl.instances.computeIfAbsent(id, id2 -> new RollGroupImpl());
     }
 

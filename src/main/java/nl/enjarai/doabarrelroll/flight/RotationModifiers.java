@@ -2,8 +2,8 @@ package nl.enjarai.doabarrelroll.flight;
 
 import java.util.HashMap;
 import java.util.Map;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.util.math.Smoother;
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.SmoothDouble;
 import nl.enjarai.doabarrelroll.DoABarrelRoll;
 import nl.enjarai.doabarrelroll.ModKeybindings;
 import nl.enjarai.doabarrelroll.api.event.RollContext;
@@ -22,22 +22,22 @@ public class RotationModifiers {
             var yaw = 0.0;
             var roll = 0.0;
 
-            if (ModKeybindings.PITCH_UP.isPressed()) {
+            if (ModKeybindings.PITCH_UP.isDown()) {
                 pitch -= delta;
             }
-            if (ModKeybindings.PITCH_DOWN.isPressed()) {
+            if (ModKeybindings.PITCH_DOWN.isDown()) {
                 pitch += delta;
             }
-            if (ModKeybindings.YAW_LEFT.isPressed()) {
+            if (ModKeybindings.YAW_LEFT.isDown()) {
                 yaw -= delta;
             }
-            if (ModKeybindings.YAW_RIGHT.isPressed()) {
+            if (ModKeybindings.YAW_RIGHT.isDown()) {
                 yaw += delta;
             }
-            if (ModKeybindings.ROLL_LEFT.isPressed()) {
+            if (ModKeybindings.ROLL_LEFT.isDown()) {
                 roll -= delta;
             }
-            if (ModKeybindings.ROLL_RIGHT.isPressed()) {
+            if (ModKeybindings.ROLL_RIGHT.isDown()) {
                 roll += delta;
             }
 
@@ -46,11 +46,11 @@ public class RotationModifiers {
         };
     }
 
-    public static RollContext.ConfiguresRotation smoothing(Smoother pitchSmoother, Smoother yawSmoother, Smoother rollSmoother, Sensitivity smoothness) {
+    public static RollContext.ConfiguresRotation smoothing(SmoothDouble pitchSmoother, SmoothDouble yawSmoother, SmoothDouble rollSmoother, Sensitivity smoothness) {
         return (rotationInstant, context) -> RotationInstant.of(
-                smoothness.pitch == 0 ? rotationInstant.pitch() : pitchSmoother.smooth(rotationInstant.pitch(), 1 / smoothness.pitch * context.getRenderDelta()),
-                smoothness.yaw == 0 ? rotationInstant.yaw() : yawSmoother.smooth(rotationInstant.yaw(), 1 / smoothness.yaw * context.getRenderDelta()),
-                smoothness.roll == 0 ? rotationInstant.roll() : rollSmoother.smooth(rotationInstant.roll(), 1 / smoothness.roll * context.getRenderDelta())
+                smoothness.pitch == 0 ? rotationInstant.pitch() : pitchSmoother.getNewDeltaValue(rotationInstant.pitch(), 1 / smoothness.pitch * context.getRenderDelta()),
+                smoothness.yaw == 0 ? rotationInstant.yaw() : yawSmoother.getNewDeltaValue(rotationInstant.yaw(), 1 / smoothness.yaw * context.getRenderDelta()),
+                smoothness.roll == 0 ? rotationInstant.roll() : rollSmoother.getNewDeltaValue(rotationInstant.roll(), 1 / smoothness.roll * context.getRenderDelta())
         );
     }
 
@@ -117,22 +117,23 @@ public class RotationModifiers {
     }
 
     private static Map<String, Double> getVars(RollContext context) {
-        var player = MinecraftClient.getInstance().player;
+        var player = Minecraft.getInstance().player;
         assert player != null;
 
         var currentRotation = context.getCurrentRotation();
-        var rotationVector = player.getRotationVector();
+        var rotationVector = player.getLookAngle();
+        var velocity = player.getDeltaMovement();
         return new HashMap<>() {{
             put("pitch", currentRotation.pitch());
             put("yaw", currentRotation.yaw());
             put("roll", currentRotation.roll());
-            put("velocity_length", player.getVelocity().length());
-            put("velocity_x", player.getVelocity().getX());
-            put("velocity_y", player.getVelocity().getY());
-            put("velocity_z", player.getVelocity().getZ());
-            put("look_x", rotationVector.getX());
-            put("look_y", rotationVector.getY());
-            put("look_z", rotationVector.getZ());
+            put("velocity_length", velocity.length());
+            put("velocity_x", velocity.x());
+            put("velocity_y", velocity.y());
+            put("velocity_z", velocity.z());
+            put("look_x", rotationVector.x());
+            put("look_y", rotationVector.y());
+            put("look_z", rotationVector.z());
         }};
     }
 }

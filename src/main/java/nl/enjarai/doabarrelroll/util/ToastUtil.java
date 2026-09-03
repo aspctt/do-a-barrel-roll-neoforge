@@ -1,16 +1,16 @@
 package nl.enjarai.doabarrelroll.util;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.toast.SystemToast;
-import net.minecraft.text.Text;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.toasts.SystemToast;
+import net.minecraft.network.chat.Component;
 
 public class ToastUtil {
     public static void toasty(String key) {
-        MinecraftClient.getInstance().getToastManager().add(SystemToast.create(
-                MinecraftClient.getInstance(),
-                SystemToast.Type.PERIODIC_NOTIFICATION,
-                Text.translatable("toast.do_a_barrel_roll"),
-                Text.translatable("toast.do_a_barrel_roll." + key)
+        Minecraft.getInstance().getToasts().addToast(SystemToast.multiline(
+                Minecraft.getInstance(),
+                SystemToast.SystemToastId.PERIODIC_NOTIFICATION,
+                Component.translatable("toast.do_a_barrel_roll"),
+                Component.translatable("toast.do_a_barrel_roll." + key)
         ));
     }
 }

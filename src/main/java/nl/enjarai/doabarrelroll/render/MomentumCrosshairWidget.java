@@ -2,14 +2,14 @@ package nl.enjarai.doabarrelroll.render;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.math.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.GameRenderer;
 import nl.enjarai.doabarrelroll.ModMath;
 import org.joml.Vector2d;
 
 public class MomentumCrosshairWidget extends RenderHelper {
 
-    public static void render(MatrixStack matrices, int scaledWidth, int scaledHeight, Vector2d mouseTurnVec) {
+    public static void render(PoseStack matrices, int scaledWidth, int scaledHeight, Vector2d mouseTurnVec) {
         int centerX = scaledWidth / 2;
         int centerY = scaledHeight / 2 - 1;
         mouseTurnVec.mul(50);
@@ -19,8 +19,8 @@ public class MomentumCrosshairWidget extends RenderHelper {
         if (!lineVec.equals(new Vector2d()) && mouseTurnVec.lengthSquared() > 10f * 10f) {
 
             RenderSystem.enableBlend();
-            RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.ONE_MINUS_DST_COLOR, GlStateManager.DstFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
-            RenderSystem.setShader(GameRenderer::getPositionColorProgram);
+            RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.ONE_MINUS_DST_COLOR, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+            RenderSystem.setShader(GameRenderer::getPositionColorShader);
             ModMath.forBresenhamLine(
                     centerX, centerY,
                     centerX + (int) lineVec.x, centerY + (int) lineVec.y,

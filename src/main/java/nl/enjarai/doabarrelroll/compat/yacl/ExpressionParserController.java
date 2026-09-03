@@ -6,7 +6,7 @@ import dev.isxander.yacl3.gui.AbstractWidget;
 import dev.isxander.yacl3.gui.YACLScreen;
 import dev.isxander.yacl3.gui.controllers.string.IStringController;
 import dev.isxander.yacl3.gui.controllers.string.StringControllerElement;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 import nl.enjarai.doabarrelroll.math.ExpressionParser;
 import nl.enjarai.doabarrelroll.math.SyntaxHighlighter;
 
@@ -22,7 +22,7 @@ public record ExpressionParserController(Option<ExpressionParser> option) implem
     }
     
     @Override
-    public Text formatValue() {
+    public Component formatValue() {
         return SyntaxHighlighter.highlightText(getString());
     }
     

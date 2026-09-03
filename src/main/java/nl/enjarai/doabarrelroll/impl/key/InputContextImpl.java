@@ -1,16 +1,13 @@
 package nl.enjarai.doabarrelroll.impl.key;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.neoforge.client.settings.IKeyConflictContext;
 import nl.enjarai.doabarrelroll.api.key.InputContext;
-import nl.enjarai.doabarrelroll.mixin.client.key.KeyBindingAccessor;
-import nl.enjarai.doabarrelroll.util.key.ContextualKeyBinding;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.function.Supplier;
 
@@ -21,68 +18,60 @@ public final class InputContextImpl implements InputContext {
         return CONTEXTS;
     }
 
-    public static boolean contextsContain(KeyBinding binding) {
-        for (var context : InputContextImpl.getContexts()) {
-            if (context.getKeyBindings().contains(binding)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private final Identifier id;
+    private final ResourceLocation id;
     private final Supplier<Boolean> activeCondition;
-    private final List<KeyBinding> keyBindings = new ReferenceArrayList<>();
-    private final Map<InputUtil.Key, KeyBinding> bindingsByKey = new HashMap<>();
-    private boolean active;
+    private final List<KeyMapping> keyBindings = new ReferenceArrayList<>();
 
-    public InputContextImpl(Identifier id, Supplier<Boolean> activeCondition) {
+    public InputContextImpl(ResourceLocation id, Supplier<Boolean> activeCondition) {
         this.id = id;
         this.activeCondition = activeCondition;
         CONTEXTS.add(this);
     }
 
-    public void tick() {
-        boolean active = activeCondition.get();
-        if (active != this.active) {
-            this.active = active;
-            KeyBinding.updatePressedStates();
-        }
-    }
-
     @Override
-    public Identifier getId() {
+    public ResourceLocation getId() {
         return id;
     }
 
+    /**
+     * Called by NeoForge from {@link KeyMapping#isDown()} on every query, so this
+     * stays a direct read of the condition rather than something cached per tick.
+     */
     @Override
     public boolean isActive() {
-        return active;
+        return activeCondition.get();
+    }
+
+    /**
+     * Only bindings in the same context can conflict with each other. A binding
+     * outside any context, including every vanilla one, is checked from its own
+     * side too, and the universal context those use answers true; the conflict
+     * suppression for that case lives in KeyBindsListEntryMixin.
+     */
+    @Override
+    public boolean conflicts(IKeyConflictContext other) {
+        return this == other;
     }
 
     @Override
-    public void addKeyBinding(KeyBinding keyBinding) {
+    public void addKeyBinding(KeyMapping keyBinding) {
         Objects.requireNonNull(keyBinding);
         keyBindings.add(keyBinding);
-        ((ContextualKeyBinding) keyBinding).doABarrelRoll$addToContext(this);
+        keyBinding.setKeyConflictContext(this);
     }
 
     @Override
-    public List<KeyBinding> getKeyBindings() {
+    public List<KeyMapping> getKeyBindings() {
         return keyBindings;
     }
 
     @Override
-    public KeyBinding getKeyBinding(InputUtil.Key key) {
-        return bindingsByKey.get(key);
-    }
-
-    @Override
-    public void updateKeysByCode() {
-        bindingsByKey.clear();
-        for (KeyBinding keyBinding : keyBindings) {
-            bindingsByKey.put(((KeyBindingAccessor) keyBinding).getBoundKey(), keyBinding);
+    public KeyMapping getKeyBinding(InputConstants.Key key) {
+        for (var keyBinding : keyBindings) {
+            if (keyBinding.getKey().equals(key)) {
+                return keyBinding;
+            }
         }
+        return null;
     }
 }

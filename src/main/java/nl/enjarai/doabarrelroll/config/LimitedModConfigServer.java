@@ -2,9 +2,9 @@ package nl.enjarai.doabarrelroll.config;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.codec.ByteBufCodecs;
 
 public interface LimitedModConfigServer {
     LimitedModConfigServer OPERATOR = new Impl(true, false);
@@ -16,10 +16,10 @@ public interface LimitedModConfigServer {
         ).apply(instance, Impl::new));
     }
 
-    static PacketCodec<PacketByteBuf, LimitedModConfigServer> getPacketCodec() {
-        return PacketCodec.tuple(
-                PacketCodecs.BOOL, LimitedModConfigServer::allowThrusting,
-                PacketCodecs.BOOL, LimitedModConfigServer::forceEnabled,
+    static StreamCodec<ByteBuf, LimitedModConfigServer> getPacketCodec() {
+        return StreamCodec.composite(
+                ByteBufCodecs.BOOL, LimitedModConfigServer::allowThrusting,
+                ByteBufCodecs.BOOL, LimitedModConfigServer::forceEnabled,
                 Impl::new
         );
     }

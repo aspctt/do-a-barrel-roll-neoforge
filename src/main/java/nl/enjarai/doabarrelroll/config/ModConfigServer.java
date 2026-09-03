@@ -3,10 +3,10 @@ package nl.enjarai.doabarrelroll.config;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.server.network.ServerPlayNetworkHandler;
-import net.minecraft.text.Text;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
+import net.minecraft.network.chat.Component;
 import nl.enjarai.doabarrelroll.DoABarrelRoll;
 import nl.enjarai.doabarrelroll.net.SyncableConfig;
 import nl.enjarai.doabarrelroll.net.ValidatableConfig;
@@ -26,11 +26,11 @@ public record ModConfigServer(boolean allowThrusting,
             Codec.INT.optionalFieldOf("installedTimeout", DEFAULT.installedTimeout()).forGetter(ModConfigServer::installedTimeout),
             KineticDamage.CODEC.optionalFieldOf("kineticDamage", DEFAULT.kineticDamage()).forGetter(ModConfigServer::kineticDamage)
     ).apply(instance, ModConfigServer::new));
-    public static final PacketCodec<ByteBuf, ModConfigServer> PACKET_CODEC = PacketCodec.tuple(
-            PacketCodecs.BOOL, ModConfigServer::allowThrusting,
-            PacketCodecs.BOOL, ModConfigServer::forceEnabled,
-            PacketCodecs.BOOL, ModConfigServer::forceInstalled,
-            PacketCodecs.INTEGER, ModConfigServer::installedTimeout,
+    public static final StreamCodec<ByteBuf, ModConfigServer> PACKET_CODEC = StreamCodec.composite(
+            ByteBufCodecs.BOOL, ModConfigServer::allowThrusting,
+            ByteBufCodecs.BOOL, ModConfigServer::forceEnabled,
+            ByteBufCodecs.BOOL, ModConfigServer::forceInstalled,
+            ByteBufCodecs.INT, ModConfigServer::installedTimeout,
             KineticDamage.PACKET_CODEC, ModConfigServer::kineticDamage,
             ModConfigServer::new
     );
@@ -41,17 +41,17 @@ public record ModConfigServer(boolean allowThrusting,
     }
 
     @Override
-    public Text getSyncTimeoutMessage() {
-        return Text.of("Please install Do a Barrel Roll 2.4.0 or later to play on this server.");
+    public Component getSyncTimeoutMessage() {
+        return Component.nullToEmpty("Please install Do a Barrel Roll 2.4.0 or later to play on this server.");
     }
 
     @Override
-    public LimitedModConfigServer getLimited(ServerPlayNetworkHandler handler) {
+    public LimitedModConfigServer getLimited(ServerGamePacketListenerImpl handler) {
         return DoABarrelRoll.checkPermission(handler, DoABarrelRoll.MODID + ".ignore_config", 2)
                 ? LimitedModConfigServer.OPERATOR : this;
     }
 
-    public static boolean canModify(ServerPlayNetworkHandler net) {
+    public static boolean canModify(ServerGamePacketListenerImpl net) {
         return DoABarrelRoll.checkPermission(net, DoABarrelRoll.MODID + ".configure", 3);
     }
 

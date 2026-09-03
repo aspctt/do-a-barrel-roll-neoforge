@@ -3,9 +3,8 @@ package nl.enjarai.doabarrelroll.config;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.codec.ByteBufCodecs;
 
 public enum KineticDamage {
     VANILLA,
@@ -20,6 +19,6 @@ public enum KineticDamage {
             return DataResult.error(() -> "Unknown kinetic damage type: " + name);
         }
     }, KineticDamage::name);
-    public static final PacketCodec<ByteBuf, KineticDamage> PACKET_CODEC =
-            PacketCodecs.STRING.xmap(KineticDamage::valueOf, KineticDamage::name);
+    public static final StreamCodec<ByteBuf, KineticDamage> PACKET_CODEC =
+            ByteBufCodecs.STRING_UTF8.map(KineticDamage::valueOf, KineticDamage::name);
 }

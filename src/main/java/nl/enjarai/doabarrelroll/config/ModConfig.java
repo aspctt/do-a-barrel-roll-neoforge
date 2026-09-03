@@ -3,8 +3,9 @@ package nl.enjarai.doabarrelroll.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.Minecraft;
+import net.neoforged.fml.loading.FMLPaths;
+import net.minecraft.client.player.LocalPlayer;
 import nl.enjarai.doabarrelroll.DoABarrelRollClient;
 import nl.enjarai.doabarrelroll.api.event.RollContext;
 import nl.enjarai.doabarrelroll.api.rotation.RotationInstant;
@@ -24,7 +25,7 @@ public class ModConfig {
             .setPrettyPrinting()
             .create();
     public static final ModConfig DEFAULT = new ModConfig();
-    public static final Path CONFIG_FILE = Path.of("config").resolve("do_a_barrel_roll-client.json");
+    public static final Path CONFIG_FILE = FMLPaths.CONFIGDIR.get().resolve("do_a_barrel_roll-client.json");
     public static ModConfig INSTANCE = loadConfigFile(CONFIG_FILE.toFile());
 
     public static void touch() {
@@ -173,9 +174,9 @@ public class ModConfig {
 
     public boolean getEnableThrust() {
         if (general.thrust.enable_thrust) {
-            ClientPlayerEntity player;
+            LocalPlayer player;
             if (DoABarrelRollClient.isConnectedToRealms() &&
-                    (player = MinecraftClient.getInstance().player) != null && player.hasPermissionLevel(2)) {
+                    (player = Minecraft.getInstance().player) != null && player.hasPermissions(2)) {
                 return true;
             }
 

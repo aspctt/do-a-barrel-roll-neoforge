@@ -1,9 +1,9 @@
 package nl.enjarai.doabarrelroll.config;
 
-import net.minecraft.text.Text;
-import net.minecraft.util.TranslatableOption;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.OptionEnum;
 
-public enum ActivationBehaviour implements TranslatableOption {
+public enum ActivationBehaviour implements OptionEnum {
     VANILLA,
     TRIPLE_JUMP,
     HYBRID,
@@ -15,12 +15,12 @@ public enum ActivationBehaviour implements TranslatableOption {
     }
 
     @Override
-    public String getTranslationKey() {
+    public String getKey() {
         return "config.do_a_barrel_roll.controls.activation_behaviour." + this.name().toLowerCase();
     }
 
     @Override
-    public Text getText() {
-        return Text.translatable(getTranslationKey());
+    public Component getCaption() {
+        return Component.translatable(getKey());
     }
 }

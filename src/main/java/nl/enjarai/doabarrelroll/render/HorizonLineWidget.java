@@ -2,14 +2,14 @@ package nl.enjarai.doabarrelroll.render;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.math.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.GameRenderer;
 import nl.enjarai.doabarrelroll.ModMath;
 import nl.enjarai.doabarrelroll.math.MagicNumbers;
 import org.joml.Vector2d;
 
 public class HorizonLineWidget extends RenderHelper {
-    public static void render(MatrixStack matrices, int scaledWidth, int scaledHeight, double roll, double pitch) {
+    public static void render(PoseStack matrices, int scaledWidth, int scaledHeight, double roll, double pitch) {
         int centerX = scaledWidth / 2 - 1;
         int centerY = scaledHeight / 2 - 1;
         roll *= -MagicNumbers.TORAD;
@@ -21,8 +21,8 @@ public class HorizonLineWidget extends RenderHelper {
         centerY += Math.round(offset.y);
 
         RenderSystem.enableBlend();
-        RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.ONE_MINUS_DST_COLOR, GlStateManager.DstFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
-        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
+        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.ONE_MINUS_DST_COLOR, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
         for (int i = 0; i < 2; i++) {
             v.negate();
 

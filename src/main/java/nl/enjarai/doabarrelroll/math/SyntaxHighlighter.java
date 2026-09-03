@@ -1,16 +1,16 @@
 package nl.enjarai.doabarrelroll.math;
 
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import nl.enjarai.doabarrelroll.DoABarrelRoll;
 
 public class SyntaxHighlighter {
 	private static final boolean debugLog = false;
 	
-	public static Text highlightText(String text) {
-		MutableText formattedText = Text.literal("");
+	public static Component highlightText(String text) {
+		MutableComponent formattedText = Component.literal("");
 		SyntaxHighlightContext context = new SyntaxHighlightContext(text);
 		
 		if (debugLog) DoABarrelRoll.LOGGER.info("Begun syntax highlighting");
@@ -125,39 +125,39 @@ public class SyntaxHighlighter {
 		 return c == ',' || c == '(' || c == ')';
 	}
 	
-	public static MutableText formatText(char ch, SyntaxType type) {
+	public static MutableComponent formatText(char ch, SyntaxType type) {
 		String str = String.valueOf(ch);
 		return formatText(str, type);
 	}
 	
-	public static MutableText formatText(String str, SyntaxType type) {
+	public static MutableComponent formatText(String str, SyntaxType type) {
 		switch (type) {
 			case Variable -> {
-				return Text.literal(str).formatted(Formatting.GREEN);
+				return Component.literal(str).withStyle(ChatFormatting.GREEN);
 			}
 			
 			case Operator -> {
-				return Text.literal(str).formatted(Formatting.LIGHT_PURPLE);
+				return Component.literal(str).withStyle(ChatFormatting.LIGHT_PURPLE);
 			}
 			
 			case Error -> {
-				return Text.literal(str).formatted(Formatting.RED);
+				return Component.literal(str).withStyle(ChatFormatting.RED);
 			}
 			
 			case Number -> {
-				return Text.literal(str).formatted(Formatting.AQUA);
+				return Component.literal(str).withStyle(ChatFormatting.AQUA);
 			}
 			
 			case Function -> {
-				return Text.literal(str).formatted(Formatting.YELLOW);
+				return Component.literal(str).withStyle(ChatFormatting.YELLOW);
 			}
 			
 			case Constant -> {
-				return Text.literal(str).setStyle(Style.EMPTY.withColor(0xFFA500));
+				return Component.literal(str).setStyle(Style.EMPTY.withColor(0xFFA500));
 			}
 			
 			case Scope -> {
-				return Text.literal(str);
+				return Component.literal(str);
 			}
 		}
 		
