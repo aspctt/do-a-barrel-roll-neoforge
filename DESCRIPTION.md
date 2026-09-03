@@ -1,48 +1,38 @@
-# <p align=center> Ballistic API </p>
+# <p align=center> Do a Barrel Roll (NeoForge) </p>
 
 ![Version](https://img.shields.io/badge/Available_for-1.21.1-blue)
 ![Mod Loader](https://img.shields.io/badge/Mod_Loader-NeoForge-orange)
-![Requires](https://img.shields.io/badge/Requires-AzureLib-blueviolet)
-![License](https://img.shields.io/badge/License-All_Rights_Reserved-red)
+![Dependencies](https://img.shields.io/badge/Dependencies-None-brightgreen)
+![License](https://img.shields.io/badge/License-GPL--3.0-red)
 
-Ballistic API is a library for adding guns, ammunition, and attachments to Minecraft through content packs. It ships the systems, not the weapons: there is nothing to craft and no creative tab to browse. Everything a player fires is defined by a pack, and adding a weapon requires no code.
+Do a Barrel Roll is a lightweight, mostly clientside mod that changes elytra flight to be more fun and semi-realistic. It redesigns movement around a completely unlocked camera, giving you full pitch, yaw and roll control in flight, along with camera modifiers like smoothing and banking.
 
-### Content packs
+This is a native NeoForge port of enjarai's mod. It installs on its own.
 
-A pack is plain data, read straight off disk from `ballistic/packs/` as a loose folder or an archive. Definitions are JSONC, so comments and trailing commas are allowed.
+### Why this version exists
 
-Guns, ammunition, and attachments are resolved and validated together, so a magazine pointing at ammunition that does not exist is reported at load with the file named, rather than crashing at the first shot. `/ballistic reload` re-reads everything without restarting.
+The official NeoForge build is the Fabric jar running through Sinytra Connector, so it needs both Connector and the Forgified Fabric API before it will start. This fork is written against NeoForge directly, with no Connector, no Fabric API, no CICADA, no Mod Menu and no Fabric permissions API. Nothing is required beyond NeoForge itself.
 
-A pack declares what a weapon is and what it looks like:
+Behaviour is unchanged. Configs, keybinds, permission nodes and the server handshake keep their original names, so an existing config file carries straight over.
 
-Stats, fire modes, and ballistics --> gameplay, resolved on the server
+### Controls
 
-Model, texture, animations, sounds --> presentation, client only
+Mouse x axis rolls, mouse y axis pitches, and the strafe keys yaw. All rebindable. The flight bindings sit in their own key conflict context, so putting yaw on A and D does not conflict with vanilla strafing: they are only live while you are flying.
 
-### Attachments
+### Configuration
 
-Attachments modify stats through a pipeline rather than overwriting them. Every additive change is summed before any multiplier applies, so installation order never changes the result, and every stat stays inside bounds the pack declares.
+Install [YACL](https://modrinth.com/mod/yacl) and the config screen appears behind the Config button next to the mod in NeoForge's mod list. YACL is optional; without it the mod runs the same and the button offers to install it.
 
-### Rendering
+### Server-side features
 
-Weapons render as animated 3D models through AzureLib, with sounds and animations mapped per event by the pack. First person arms are the player's own, drawn with their real skin.
-
-Because presentation is client side only, a dedicated server runs correctly with no models, textures, or sounds on disk at all.
+Install it on the server as well and playermodel roll is synced between clients. Vanilla clients and vanilla servers stay fully compatible either way. Operators get a Server tab covering thrusting, forced activation, forced installation and kinetic damage, and both permission nodes are registered with NeoForge's permission API.
 
 ### Requirements
 
-Minecraft 1.21.1, NeoForge 21.1.248 or newer, and AzureLib 3.1.11 or newer.
-
-Tested alongside Sodium, Lithium, FerriteCore, ScalableLux, NotEnoughAnimations, ModernFix, and Iris. ModernFix's dynamic resources feature is supported specifically.
+Minecraft 1.21.1 and NeoForge 21.1.249 or newer. YACL 3.6.0 or newer is optional, for the config screen.
 
 ### License
 
-Ballistic API is All Rights Reserved. The full terms are in [LICENSE](LICENSE), and the short version is:
+GPL-3.0-only, the same licence as upstream. The full terms are in [LICENSE](LICENSE).
 
-- Download it and play with it freely.
-- Content packs are yours. Create them for any purpose including commercial ones, distribute and sell them on any terms you choose, and use the pack formats, schemas, field names, directory layouts, and public API to do it. No ownership is claimed over your work and no attribution is required. This grant is irrevocable: it cannot be withdrawn from packs already published, and it survives any future change to the licence.
-- Separate mods, tools, editors, and validators that interoperate through the public API or pack formats are equally permitted.
-- Modpacks may include the mod by reference, the way a CurseForge manifest or a Modrinth index does, so the launcher fetches it from an official page. Re-hosting, bundling, or altering the JAR is not permitted.
-- The mod's own source code and assets stay reserved.
-
-Trademarks and third-party licences are covered in [NOTICE](NOTICE).
+Do a Barrel Roll is by [enjarai](https://github.com/enjarai), based on [Cool Elytra Roll](https://github.com/Jorbon/cool_elytra) by Jorbon. Mod icon by Mizeno. Native NeoForge port by aspctt.
