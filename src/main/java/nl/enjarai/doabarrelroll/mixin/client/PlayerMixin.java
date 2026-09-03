@@ -1,11 +1,11 @@
 package nl.enjarai.doabarrelroll.mixin.client;
 
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.World;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import nl.enjarai.doabarrelroll.config.ActivationBehaviour;
 import nl.enjarai.doabarrelroll.config.ModConfig;
 import nl.enjarai.doabarrelroll.util.MixinHooks;
@@ -14,28 +14,28 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(PlayerEntity.class)
-public abstract class PlayerEntityMixin extends LivingEntity {
-    protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
+@Mixin(Player.class)
+public abstract class PlayerMixin extends LivingEntity {
+    protected PlayerMixin(EntityType<? extends LivingEntity> entityType, Level world) {
         super(entityType, world);
     }
 
     @SuppressWarnings("ConstantConditions")
     @Inject(
-            method = "checkFallFlying()Z",
+            method = "tryToStartFallFlying()Z",
             at = @At("HEAD"),
             cancellable = true
     )
     private void doABarrelRoll$interceptFallFlyingStart(CallbackInfoReturnable<Boolean> cir) {
         // We do the same checks the original method does, but leave out the one about already fallFlying.
         // This is needed for the hybrid mode.
-        if (this.isOnGround() || this.isTouchingWater() || this.hasStatusEffect(StatusEffects.LEVITATION)) {
+        if (this.onGround() || this.isInWater() || this.hasEffect(MobEffects.LEVITATION)) {
             return;
         }
 
         var behaviour = ModConfig.INSTANCE.getActivationBehaviour();
 
-        if ((((PlayerEntity) (Object) this) instanceof ClientPlayerEntity)
+        if ((((Player) (Object) this) instanceof LocalPlayer)
                 && (behaviour == ActivationBehaviour.TRIPLE_JUMP
                 || behaviour == ActivationBehaviour.HYBRID
                 || behaviour == ActivationBehaviour.HYBRID_TOGGLE)) {

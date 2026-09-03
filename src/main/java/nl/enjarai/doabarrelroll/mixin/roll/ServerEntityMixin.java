@@ -1,7 +1,7 @@
 package nl.enjarai.doabarrelroll.mixin.roll;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.server.network.EntityTrackerEntry;
+import net.minecraft.server.level.ServerEntity;
+import net.minecraft.world.entity.Entity;
 import nl.enjarai.doabarrelroll.api.RollEntity;
 import nl.enjarai.doabarrelroll.net.ServerNetworking;
 import org.spongepowered.asm.mixin.Final;
@@ -12,8 +12,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(EntityTrackerEntry.class)
-public abstract class EntityTrackerEntryMixin {
+@Mixin(ServerEntity.class)
+public abstract class ServerEntityMixin {
     @Shadow @Final private Entity entity;
 
     @Unique
@@ -22,7 +22,7 @@ public abstract class EntityTrackerEntryMixin {
     private float lastRoll;
 
     @Inject(
-            method = "tick",
+            method = "sendChanges",
             at = @At("TAIL")
     )
     private void doABarrelRoll$syncRollS2C(CallbackInfo ci) {
