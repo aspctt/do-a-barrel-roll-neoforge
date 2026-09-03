@@ -1,0 +1,44 @@
+modLoader = "javafml"
+loaderVersion = "${loader_version_range}"
+license = "${mod_license}"
+
+issueTrackerURL = "https://github.com/aspctt/do-a-barrel-roll-neoforge/issues"
+
+[[mods]]
+modId = "${mod_id}"
+version = "${mod_version}"
+displayName = "${mod_name}"
+displayURL = "https://github.com/aspctt/do-a-barrel-roll-neoforge"
+authors = "enjarai"
+credits = "Native NeoForge port by aspctt. Based on Cool Elytra Roll by Jorbon. Mod icon by Mizeno."
+description = '''
+Microsoft flight simulator for Minecraft elytras. Native NeoForge, no Fabric API and no Connector.
+'''
+logoFile = "assets/${mod_id}/icon.png"
+
+[[mixins]]
+config = "${mod_id}.mixins.json"
+
+[[dependencies.${mod_id}]]
+modId = "neoforge"
+type = "required"
+versionRange = "[${neo_version},)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${mod_id}]]
+modId = "minecraft"
+type = "required"
+versionRange = "${minecraft_version_range}"
+ordering = "NONE"
+side = "BOTH"
+
+# The config screen is the only thing that uses YACL and every route into it is
+# guarded, so the mod runs without it. Without YACL the config button opens a
+# prompt offering to install it instead.
+[[dependencies.${mod_id}]]
+modId = "yet_another_config_lib_v3"
+type = "optional"
+versionRange = "[${yacl_min_version},)"
+ordering = "AFTER"
+side = "CLIENT"
