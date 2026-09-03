@@ -32,8 +32,25 @@ public class ServerNetworking {
         });
     }
 
+    /**
+     * Offers the server config to a joining player.
+     *
+     * <p>Called for everyone who joins, including players without the mod. Upstream
+     * can send unconditionally because a vanilla client simply ignores a plugin
+     * message it does not know; NeoForge instead throws when a payload is aimed at
+     * a connection that never registered the channel, so the send is guarded.
+     *
+     * <p>The handshake state advances either way. A client that was never sent the
+     * config cannot reply to it, which is exactly the case forceInstalled exists to
+     * catch, so the kick timer has to start for them too.
+     */
     public static void sendHandshake(ServerPlayer player) {
-        PacketDistributor.sendToPlayer(player, HANDSHAKE_SERVER.initiateConfigSync(player.connection));
+        var payload = HANDSHAKE_SERVER.initiateConfigSync(player.connection);
+
+        if (NetworkRegistry.hasChannel(player.connection, ConfigSyncS2CPacket.PACKET_ID.id())) {
+            PacketDistributor.sendToPlayer(player, payload);
+        }
+
         HANDSHAKE_SERVER.configSentToClient(player.connection);
     }
 
