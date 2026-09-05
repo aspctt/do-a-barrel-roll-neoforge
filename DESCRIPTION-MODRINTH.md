@@ -1,9 +1,19 @@
 # <p align=center> Do Another Barrel Roll </p>
 
+<div align="center">
+
 ![Version](https://img.shields.io/badge/Available_for-1.21.1-blue)
-![Mod Loader](https://img.shields.io/badge/Mod_Loader-NeoForge-orange)
 ![Requires](https://img.shields.io/badge/Requires-Nothing-brightgreen)
-![License](https://img.shields.io/badge/License-GPL--3.0-red)
+![License](https://img.shields.io/badge/License-GPL--3.0--only-red)
+
+![NeoForge](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/supported/neoforge_vector.svg)
+![Forge](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/unsupported/forge_vector.svg)
+
+[![GitHub](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact-minimal/available/github_vector.svg)](https://github.com/aspctt/do-a-barrel-roll-neoforge)
+[![Modrinth](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact-minimal/available/modrinth_vector.svg)](https://modrinth.com/mod/do-another-barrel-roll)
+[![CurseForge](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact-minimal/available/curseforge_vector.svg)](https://www.curseforge.com/minecraft/mc-mods/do-another-barrel-roll)
+
+</div>
 
 **A native NeoForge port of enjarai's Do a Barrel Roll.**
 
@@ -33,6 +43,6 @@ Minecraft 1.21.1 and NeoForge 21.1.249 or newer. YACL 3.6.0 or newer is optional
 
 ### License
 
-GPL-3.0-only, the same licence as upstream. The full terms are in [LICENSE](LICENSE).
+GPL-3.0-only, the same licence as upstream. The full terms are in [LICENSE](https://github.com/aspctt/do-a-barrel-roll-neoforge/blob/main/LICENSE).
 
 Do a Barrel Roll is by [enjarai](https://github.com/enjarai), based on [Cool Elytra Roll](https://github.com/Jorbon/cool_elytra) by Jorbon. Mod icon by Mizeno. Native NeoForge port by aspctt.
