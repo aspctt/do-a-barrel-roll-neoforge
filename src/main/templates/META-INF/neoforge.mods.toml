@@ -16,7 +16,7 @@ Microsoft flight simulator for Minecraft elytras.
 
 A native NeoForge port of enjarai's Do a Barrel Roll. Same mod, with no Fabric API and no Forgified Fabric API. It shares a mod id with the original, so the two cannot be installed together.
 '''
-logoFile = "assets/${mod_id}/icon.png"
+${icon_field} = "assets/${mod_id}/icon.png"
 
 [[mixins]]
 config = "${mod_id}.mixins.json"
@@ -24,7 +24,7 @@ config = "${mod_id}.mixins.json"
 [[dependencies.${mod_id}]]
 modId = "neoforge"
 type = "required"
-versionRange = "[${neo_version},)"
+versionRange = "${neo_version_range}"
 ordering = "NONE"
 side = "BOTH"
 

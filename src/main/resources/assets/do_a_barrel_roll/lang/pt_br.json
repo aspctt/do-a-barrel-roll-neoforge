@@ -37,6 +37,7 @@
   "config.do_a_barrel_roll.yacl.missing": "Yet Another Config Lib is not installed",
   "config.do_a_barrel_roll.yacl.missing.message": "YACL 3 is required to edit the config in game, would you like to install YACL 3?",
   "category.do_a_barrel_roll.do_a_barrel_roll": "Do Another Barrel Roll",
+  "key.category.do_a_barrel_roll.do_a_barrel_roll": "Do Another Barrel Roll",
   "key.do_a_barrel_roll.toggle_enabled": "Alternar ativado",
   "key.do_a_barrel_roll.toggle_enabled.enable": "§aHabilitado §rDo a Barrel Roll",
   "key.do_a_barrel_roll.toggle_enabled.disable": "§cDesativado §rDo a Barrel Roll"
