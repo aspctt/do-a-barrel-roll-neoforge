@@ -29,19 +29,18 @@ public class EventCallbacksClient {
         if (!DoABarrelRollClient.isFallFlying()) return;
         var tickDelta = tickCounter.getGameTimeDeltaPartialTick(true);
 
-        var matrices = context.pose();
         var entity = Minecraft.getInstance().getCameraEntity();
         var rollEntity = ((RollEntity) entity);
         if (entity != null) {
             if (ModConfig.INSTANCE.getShowHorizon()) {
-                HorizonLineWidget.render(matrices, scaledWidth, scaledHeight,
+                HorizonLineWidget.render(context, scaledWidth, scaledHeight,
                         rollEntity.doABarrelRoll$getRoll(tickDelta), entity.getViewXRot(tickDelta));
             }
 
             if (ModConfig.INSTANCE.getMomentumBasedMouse() && ModConfig.INSTANCE.getShowMomentumWidget()) {
                 var rollMouse = (RollMouse) Minecraft.getInstance().mouseHandler;
 
-                MomentumCrosshairWidget.render(matrices, scaledWidth, scaledHeight, new Vector2d(rollMouse.doABarrelRoll$getMouseTurnVec()));
+                MomentumCrosshairWidget.render(context, scaledWidth, scaledHeight, new Vector2d(rollMouse.doABarrelRoll$getMouseTurnVec()));
             }
         }
     }

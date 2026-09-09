@@ -12,6 +12,7 @@ import nl.enjarai.doabarrelroll.api.rotation.RotationInstant;
 import nl.enjarai.doabarrelroll.config.serialization.ExpressionParserTypeAdapter;
 import nl.enjarai.doabarrelroll.math.ExpressionParser;
 import nl.enjarai.doabarrelroll.net.ClientNetworking;
+import nl.enjarai.doabarrelroll.util.ModPermissions;
 import nl.enjarai.doabarrelroll.util.ToastUtil;
 
 import java.io.*;
@@ -176,7 +177,7 @@ public class ModConfig {
         if (general.thrust.enable_thrust) {
             LocalPlayer player;
             if (DoABarrelRollClient.isConnectedToRealms() &&
-                    (player = Minecraft.getInstance().player) != null && player.hasPermissions(2)) {
+                    (player = Minecraft.getInstance().player) != null && ModPermissions.hasLevel(player, 2)) {
                 return true;
             }
 

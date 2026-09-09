@@ -10,13 +10,21 @@ import nl.enjarai.doabarrelroll.config.LimitedModConfigServer;
 import nl.enjarai.doabarrelroll.config.ModConfig;
 import nl.enjarai.doabarrelroll.config.ModConfigScreen;
 import nl.enjarai.doabarrelroll.net.ClientNetworking;
+import nl.enjarai.doabarrelroll.util.ScreenUtil;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
 
 public class ModKeybindings {
+    // 1.21.11 turned the category from a bare translation key into a registered id, and derives the
+    // label from it as key.category.<namespace>.<path>. Both sets of keys are in the lang files.
+    //? if <1.21.11 {
     private static final String CATEGORY = "category.do_a_barrel_roll.do_a_barrel_roll";
     private static final String MOVEMENT_CATEGORY = "category.do_a_barrel_roll.do_a_barrel_roll.movement";
+    //?} else {
+    /*public static final KeyMapping.Category CATEGORY = new KeyMapping.Category(DoABarrelRoll.id("do_a_barrel_roll"));
+    public static final KeyMapping.Category MOVEMENT_CATEGORY = new KeyMapping.Category(DoABarrelRoll.id("movement"));
+    *///?}
 
     public static final KeyMapping TOGGLE_ENABLED = new KeyMapping(
             "key.do_a_barrel_roll.toggle_enabled",
@@ -81,6 +89,21 @@ public class ModKeybindings {
         CONTEXT.addKeyBinding(THRUST_BACKWARD);
     }
 
+    /**
+     * Puts a message on the action bar.
+     *
+     * <p>26.1 split the two things displayClientMessage did into a method each, so the boolean that
+     * used to pick between chat and the action bar is gone.
+     */
+    private static void overlayMessage(Minecraft client, Component message) {
+        if (client.player == null) return;
+
+        //? if <26.1 {
+        client.player.displayClientMessage(message, true);
+        //?} else
+        /*client.player.sendOverlayMessage(message);*/
+    }
+
     private static KeyMapping movementKey(String name, int keyCode) {
         return new KeyMapping(
                 "key.do_a_barrel_roll." + name,
@@ -97,22 +120,12 @@ public class ModKeybindings {
                 ModConfig.INSTANCE.setModEnabled(!ModConfig.INSTANCE.getModEnabled());
                 ModConfig.INSTANCE.save();
 
-                if (client.player != null) {
-                    client.player.displayClientMessage(
-                            Component.translatable(
-                                    "key.do_a_barrel_roll." +
-                                            (ModConfig.INSTANCE.getModEnabled() ? "toggle_enabled.enable" : "toggle_enabled.disable")
-                            ),
-                            true
-                    );
-                }
+                overlayMessage(client, Component.translatable(
+                        "key.do_a_barrel_roll." +
+                                (ModConfig.INSTANCE.getModEnabled() ? "toggle_enabled.enable" : "toggle_enabled.disable")
+                ));
             } else {
-                if (client.player != null) {
-                    client.player.displayClientMessage(
-                            Component.translatable("key.do_a_barrel_roll.toggle_enabled.disallowed"),
-                            true
-                    );
-                }
+                overlayMessage(client, Component.translatable("key.do_a_barrel_roll.toggle_enabled.disallowed"));
             }
         }
         while (TOGGLE_THRUST.consumeClick()) {
@@ -120,26 +133,16 @@ public class ModKeybindings {
                 ModConfig.INSTANCE.setEnableThrust(!ModConfig.INSTANCE.getEnableThrust());
                 ModConfig.INSTANCE.save();
 
-                if (client.player != null) {
-                    client.player.displayClientMessage(
-                            Component.translatable(
-                                    "key.do_a_barrel_roll." +
-                                            (ModConfig.INSTANCE.getEnableThrust() ? "toggle_thrust.enable" : "toggle_thrust.disable")
-                            ),
-                            true
-                    );
-                }
+                overlayMessage(client, Component.translatable(
+                        "key.do_a_barrel_roll." +
+                                (ModConfig.INSTANCE.getEnableThrust() ? "toggle_thrust.enable" : "toggle_thrust.disable")
+                ));
             } else {
-                if (client.player != null) {
-                    client.player.displayClientMessage(
-                            Component.translatable("key.do_a_barrel_roll.toggle_thrust.disallowed"),
-                            true
-                    );
-                }
+                overlayMessage(client, Component.translatable("key.do_a_barrel_roll.toggle_thrust.disallowed"));
             }
         }
         while (OPEN_CONFIG.consumeClick()) {
-            client.setScreen(ModConfigScreen.create(client.screen));
+            ScreenUtil.setScreen(client, ModConfigScreen.create(ScreenUtil.currentScreen(client)));
         }
     }
 }

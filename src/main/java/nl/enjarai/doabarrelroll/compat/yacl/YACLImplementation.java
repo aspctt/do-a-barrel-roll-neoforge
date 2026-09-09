@@ -25,6 +25,8 @@ import nl.enjarai.doabarrelroll.config.*;
 import nl.enjarai.doabarrelroll.math.ExpressionParser;
 import nl.enjarai.doabarrelroll.net.ClientNetworking;
 import nl.enjarai.doabarrelroll.net.ServerNetworking;
+import nl.enjarai.doabarrelroll.util.ModPermissions;
+import nl.enjarai.doabarrelroll.util.ScreenUtil;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -38,7 +40,7 @@ public class YACLImplementation {
         var inWorld = Minecraft.getInstance().level != null;
         LocalPlayer player;
         var onRealms = DoABarrelRollClient.isConnectedToRealms() &&
-                (player = Minecraft.getInstance().player) != null && player.hasPermissions(2);
+                (player = Minecraft.getInstance().player) != null && ModPermissions.hasLevel(player, 2);
         var serverConfig = ClientNetworking.HANDSHAKE_CLIENT.getConfig();
 
         var thrustingAllowed = new Dependable(serverConfig.map(LimitedModConfigServer::allowThrusting).orElse(!inWorld || onRealms));
@@ -219,11 +221,11 @@ public class YACLImplementation {
                                         .text(getText("documentation", "get_help.text"))
                                         .action((screen, btn) -> {
                                             var client = Minecraft.getInstance();
-                                            client.setScreen(new ConfirmScreen((result) -> {
+                                            ScreenUtil.setScreen(client, new ConfirmScreen((result) -> {
                                                 if (result) {
                                                     Util.getPlatform().openUri(URI.create("https://discord.gg/WcYsDDQtyR"));
                                                 }
-                                                client.setScreen(screen);
+                                                ScreenUtil.setScreen(client, screen);
                                             }, getText("documentation", "get_help"), getText("documentation", "get_help.confirm"), CommonComponents.GUI_YES, CommonComponents.GUI_NO));
                                         })
                                         .build())

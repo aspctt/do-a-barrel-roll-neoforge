@@ -2,6 +2,8 @@ package nl.enjarai.doabarrelroll.util;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+//? if >=1.21.11
+/*import net.minecraft.client.renderer.RenderPipelines;*/
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -48,8 +50,13 @@ public class StarFoxUtil {
             int x = scaledWidth / 2 - 75;
             int y = scaledHeight - 90;
             int texture = barrelRollTimer % 2 == 0 ? 1 : 2;
+            //? if <1.21.11 {
             context.blit(texture == 1 ? barrelRollTexture1 : barrelRollTexture2,
                     x, y, 0, 0, 160, 160, 160, 160);
+            //?} else {
+            /*context.blit(RenderPipelines.GUI_TEXTURED, texture == 1 ? barrelRollTexture1 : barrelRollTexture2,
+                    x, y, 0, 0, 160, 160, 160, 160);
+            *///?}
         }
     }
 

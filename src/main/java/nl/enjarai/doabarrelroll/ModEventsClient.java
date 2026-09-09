@@ -8,6 +8,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
+//? if <1.21.11
 import net.neoforged.neoforge.client.event.CustomizeGuiOverlayEvent;
 import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
@@ -17,6 +18,7 @@ import nl.enjarai.doabarrelroll.api.RollEntity;
 import nl.enjarai.doabarrelroll.net.ClientNetworking;
 import nl.enjarai.doabarrelroll.util.StarFoxUtil;
 
+//? if <1.21.11
 import java.util.Locale;
 
 /**
@@ -68,7 +70,10 @@ public class ModEventsClient {
      */
     @SubscribeEvent
     public static void computeCameraAngles(ViewportEvent.ComputeCameraAngles event) {
+        //? if <1.21.11 {
         var entity = event.getCamera().getEntity();
+        //?} else
+        /*var entity = event.getCamera().entity();*/
         if (!(entity instanceof RollEntity rollEntity)) return;
 
         float partialTick = (float) event.getPartialTick();
@@ -100,14 +105,20 @@ public class ModEventsClient {
         // Recovery for the remaining case: a listener at this same priority
         // cancels after we have already pushed. The next layer undoes it.
         if (crosshairPosePushed && !event.getName().equals(VanillaGuiLayers.CROSSHAIR)) {
+            //? if <1.21.11 {
             event.getGuiGraphics().pose().popPose();
+            //?} else
+            /*event.getGuiGraphics().pose().popMatrix();*/
             crosshairPosePushed = false;
         }
 
         if (!event.getName().equals(VanillaGuiLayers.CROSSHAIR) || event.isCanceled()) return;
 
         var context = event.getGuiGraphics();
+        //? if <1.21.11 {
         context.pose().pushPose();
+        //?} else
+        /*context.pose().pushMatrix();*/
         crosshairPosePushed = true;
         EventCallbacksClient.onRenderCrosshair(
                 context, event.getPartialTick(), context.guiWidth(), context.guiHeight());
@@ -117,7 +128,10 @@ public class ModEventsClient {
     public static void afterGuiLayer(RenderGuiLayerEvent.Post event) {
         if (!event.getName().equals(VanillaGuiLayers.CROSSHAIR) || !crosshairPosePushed) return;
 
+        //? if <1.21.11 {
         event.getGuiGraphics().pose().popPose();
+        //?} else
+        /*event.getGuiGraphics().pose().popMatrix();*/
         crosshairPosePushed = false;
     }
 
@@ -131,9 +145,13 @@ public class ModEventsClient {
                 context.guiHeight());
     }
 
+    //? if <1.21.11 {
     /**
      * Adds roll to the debug screen's facing line, inside the same bracket as yaw
      * and pitch: "Facing: south (Towards positive Z) (12.3 / -4.5 / 90.0)".
+     *
+     * <p>1.21.11 turned the debug screen into a registry of entries that can only add lines, so from
+     * there the roll is its own line, registered as ModBusEventsClient.RollDebugEntry.
      */
     @SubscribeEvent
     public static void debugText(CustomizeGuiOverlayEvent.DebugText event) {
@@ -150,4 +168,5 @@ public class ModEventsClient {
             return;
         }
     }
+    //?}
 }

@@ -1,6 +1,11 @@
 package nl.enjarai.doabarrelroll.util;
 
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+//? if >=1.21.11 {
+/*import net.minecraft.server.permissions.Permission;
+import net.minecraft.server.permissions.PermissionLevel;
+*///?}
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.server.permission.PermissionAPI;
@@ -50,14 +55,27 @@ public class ModPermissions {
                         player, node, DEFAULT_PERMISSION_LEVEL_CONTEXT.createContext(defaultPermissionLevel));
             }
         }
-        return player.hasPermissions(defaultPermissionLevel);
+        return hasLevel(player, defaultPermissionLevel);
+    }
+
+    /**
+     * Whether a player holds at least the given vanilla operator level.
+     *
+     * <p>1.21.11 replaced the integer level check with a permission set, so this is the only place
+     * that has to know which of the two a target speaks. The levels themselves did not change.
+     */
+    public static boolean hasLevel(Player player, int level) {
+        //? if <1.21.11 {
+        return player.hasPermissions(level);
+        //?} else
+        /*return player.permissions().hasPermission(new Permission.HasCommandLevel(PermissionLevel.byId(level)));*/
     }
 
     private static boolean defaultResolve(@Nullable ServerPlayer player, UUID playerUUID, PermissionDynamicContext<?>... context) {
         if (player != null) {
             for (var key : context) {
                 if (key.getDynamic() == DEFAULT_PERMISSION_LEVEL_CONTEXT) {
-                    return player.hasPermissions((int) key.getValue());
+                    return hasLevel(player, (int) key.getValue());
                 }
             }
         }
