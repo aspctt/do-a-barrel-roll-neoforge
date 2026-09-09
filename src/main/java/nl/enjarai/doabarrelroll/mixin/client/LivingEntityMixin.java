@@ -23,7 +23,12 @@ public abstract class LivingEntityMixin extends Entity {
         super(type, world);
     }
 
+    // 1.21.11 broke travel apart, moving the elytra case into travelFallFlying and the flight maths
+    // itself into updateFallFlyingMovement. The call this modifies is the same one either way: the
+    // final setDeltaMovement of the fall flying branch, whose argument ends in multiply(0.99, 0.98,
+    // 0.99). It is the only Vec3 setDeltaMovement left in the smaller method, hence the ordinal.
     @SuppressWarnings("ConstantConditions")
+    //? if <1.21.11 {
     @ModifyArg(
             method = "travel",
             at = @At(
@@ -32,6 +37,16 @@ public abstract class LivingEntityMixin extends Entity {
                     ordinal = 6
             )
     )
+    //?} else {
+    /*@ModifyArg(
+            method = "travelFallFlying",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/entity/LivingEntity;setDeltaMovement(Lnet/minecraft/world/phys/Vec3;)V",
+                    ordinal = 0
+            )
+    )
+    *///?}
     private Vec3 doABarrelRoll$wrapElytraVelocity(Vec3 original) {
         if (!((Object) this instanceof LocalPlayer) || !ModConfig.INSTANCE.getEnableThrust()) return original;
 
