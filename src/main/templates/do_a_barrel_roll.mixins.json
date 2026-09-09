@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "nl.enjarai.doabarrelroll.mixin",
+  "compatibilityLevel": "JAVA_${java_version}",
+  "mixins": [
+    ${common_mixins}
+  ],
+  "client": [
+    ${client_mixins}
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
