@@ -19,11 +19,15 @@ jobs:
         with:
           ref: ${{ inputs.branch }}
 
+      # Two toolchains, because 1.21.1 and 1.21.11 build on Java 21 and 26.1 and 26.2 on Java 25.
+      # Gradle picks the right one per target from the versions declared in build.gradle.kts.
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: ${{ inputs.java_version }}
+          java-version: |
+            ${{ inputs.java_version }}
+            25
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -31,11 +35,11 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build
-        run: ./gradlew build
+      - name: Build every Minecraft version
+        run: ./gradlew buildAll --stacktrace
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: Artifacts
-          path: build/libs/
+          path: versions/*/build/libs/*.jar
