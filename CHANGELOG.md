@@ -4,7 +4,7 @@
 
 First release of the native NeoForge port, forked from upstream 3.7.3.
 
-- Runs on NeoForge directly. Sinytra Connector, Fabric API, Forgified Fabric API, CICADA, Mod Menu and the Fabric permissions API are all gone, and nothing replaces them: the jar has no dependencies beyond NeoForge.
+- Runs on NeoForge directly. Fabric API, Forgified Fabric API, CICADA, Mod Menu and the Fabric permissions API are all gone, and nothing replaces them: the jar has no dependencies beyond NeoForge.
 - Config screen is reached through NeoForge's mod list Config button. YACL stays optional.
 - Camera roll, the crosshair widgets, the Peppy overlay and the F3 roll readout run on NeoForge events instead of mixins.
 - Kinetic damage is applied through the incoming damage event rather than by rewriting a local inside `LivingEntity.travel`.

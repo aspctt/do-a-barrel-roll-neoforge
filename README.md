@@ -13,9 +13,9 @@
 
 Do a Barrel Roll is a lightweight, mostly clientside mod that changes elytra flight to be more fun and semi-realistic. It redesigns movement around a completely unlocked camera, giving you full pitch, yaw and roll control in flight, plus a set of subtle and less subtle camera modifiers including smoothing and banking.
 
-Upstream ships a NeoForge build, but it is the Fabric jar running through Sinytra Connector and it requires both Connector and the Forgified Fabric API to work. This port is written against NeoForge directly:
+Upstream ships a NeoForge build, but it is produced from a multiloader template and runs on the Forgified Fabric API, which has to be installed alongside it. This port is written against NeoForge directly:
 
-* No Sinytra Connector, no Fabric API, no Forgified Fabric API.
+* No Fabric API and no Forgified Fabric API.
 * No CICADA, no Mod Menu, no Fabric permissions API.
 * Mojang mappings throughout, with the camera, HUD, damage, keybinding and networking hooks moved onto NeoForge's own events where NeoForge has one.
 

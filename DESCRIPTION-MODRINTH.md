@@ -21,7 +21,7 @@ Do a Barrel Roll is a lightweight, mostly clientside mod that changes elytra fli
 
 ### Why this version exists
 
-The official NeoForge build is the Fabric jar running through Sinytra Connector, so it needs both Connector and the Forgified Fabric API before it will start. This port is written against NeoForge directly, with no Connector, no Fabric API, no CICADA, no Mod Menu and no Fabric permissions API. Nothing is required beyond NeoForge itself.
+The official NeoForge build is produced from a multiloader template and runs on the Forgified Fabric API, so that has to be installed alongside it before the game will start. This port is written against NeoForge directly, with no Fabric API, no Forgified Fabric API, no CICADA, no Mod Menu and no Fabric permissions API. Nothing is required beyond NeoForge itself.
 
 Behaviour is unchanged. Configs, keybinds, permission nodes and the server handshake keep their original names, so an existing config file carries straight over.
 

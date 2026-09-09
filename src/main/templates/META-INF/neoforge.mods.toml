@@ -14,7 +14,7 @@ credits = "Do a Barrel Roll by enjarai, NeoForge port by aspctt. Based on Cool E
 description = '''
 Microsoft flight simulator for Minecraft elytras.
 
-A native NeoForge port of enjarai's Do a Barrel Roll. Same mod, no Sinytra Connector and no Fabric API. It shares a mod id with the original, so the two cannot be installed together.
+A native NeoForge port of enjarai's Do a Barrel Roll. Same mod, with no Fabric API and no Forgified Fabric API. It shares a mod id with the original, so the two cannot be installed together.
 '''
 logoFile = "assets/${mod_id}/icon.png"
 
