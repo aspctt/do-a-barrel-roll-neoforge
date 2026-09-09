@@ -1,5 +1,23 @@
 # Changelog
 
+## 3.7.4, Minecraft 1.21.1, 1.21.11, 26.1 and 26.2
+
+Adds the three newer Minecraft versions alongside 1.21.1. One jar per API band, built from one source
+tree with Stonecutter. The 26.1 jar covers 26.1, 26.1.1 and 26.1.2.
+
+- The debug screen roll readout is its own line from 1.21.11 on. That version turned the debug screen
+  into a registry of entries which can only add lines, so it can no longer be folded into the vanilla
+  facing line the way it still is on 1.21.1.
+- The playermodel bank is written into the render state from 1.21.11 on, rather than intercepted in
+  the renderer, because that is where the rotation now comes from.
+- The crosshair and horizon widgets draw through the inverting GUI pipeline from 1.21.11 on, instead
+  of setting the blend around an immediate mode draw.
+- Keybinding categories are registered ids from 1.21.11 on, so the lang files carry both spellings of
+  the category keys.
+- Everything a player interacts with is unchanged, and configs, keybinds, permission nodes and the
+  server handshake keep their names across all four versions.
+- Ships this project's own mod icon rather than the one inherited from upstream.
+
 ## 3.7.3+1.21.1
 
 First release of the native NeoForge port, forked from upstream 3.7.3.

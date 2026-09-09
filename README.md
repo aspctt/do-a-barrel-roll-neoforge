@@ -2,7 +2,7 @@
 
 # <p align=center> Do Another Barrel Roll </p>
 
-![Version](https://img.shields.io/badge/Available_for-1.21.1-blue)
+![Version](https://img.shields.io/badge/Available_for-1.21.1_--_26.2-blue)
 ![Mod Loader](https://img.shields.io/badge/Mod_Loader-NeoForge-orange)
 ![Requires](https://img.shields.io/badge/Requires-Nothing-brightgreen)
 ![License](https://img.shields.io/badge/License-GPL--3.0-red)
@@ -53,11 +53,16 @@ Visual aspects of the mod (playermodel roll in particular) can be synced between
 
 ## Installation
 
-* Minecraft 1.21.1
-* NeoForge 21.1.249 or newer
-* [YACL](https://modrinth.com/mod/yacl) 3.6.0 or newer, optional, for the config screen
+Pick the jar matching your Minecraft version:
 
-Drop the JAR in your `mods` folder. Nothing else is required.
+| Minecraft | NeoForge | YACL, optional |
+| --- | --- | --- |
+| 1.21.1 | 21.1.0 or newer | 3.6.0 or newer |
+| 1.21.11 | 21.11.0 or newer | 3.8.1 or newer |
+| 26.1, 26.1.1, 26.1.2 | 26.1.0 or newer | 3.9.5 or newer |
+| 26.2 | 26.2.0 or newer | 3.9.5 or newer |
+
+The 26.1 jar covers the whole 26.1.x line. Drop the JAR in your `mods` folder. Nothing else is required.
 
 ## Disclaimers
 
@@ -95,7 +100,20 @@ Everything a player interacts with is the same. What changed underneath:
 - The clientbound roll packet keeps its original channel name; the serverbound one is renamed to `do_a_barrel_roll:roll_sync_c2s`, because NeoForge allows one payload per channel id rather than one per direction.
 - Kinetic damage is applied through NeoForge's incoming damage event rather than by rewriting a local variable inside `LivingEntity.travel`.
 - Camera roll, the crosshair widgets, the Peppy overlay and the F3 roll readout all go through NeoForge events instead of mixins.
+- On 1.21.11 and newer the F3 roll readout is a line of its own rather than part of the facing line. Those versions turned the debug screen into a registry of entries that can only add lines.
 - Lang files are JSON rather than the YAML upstream compiles with yamlang.
+
+## Building
+
+All four Minecraft versions are built from one source tree with [Stonecutter](https://stonecutter.kikugie.dev/). Each target is declared in [settings.gradle.kts](./settings.gradle.kts), with its Minecraft, NeoForge and YACL versions in `versions/<target>/gradle.properties`.
+
+```bash
+./gradlew buildAll
+```
+
+That writes one jar per target under `versions/<target>/build/libs/`. To work on a single version, run `./gradlew "26.2:build"`, or switch the source tree over with the "Set active project to ..." tasks so the IDE resolves against that version. Run `Reset active project` before committing, so the tree goes back to 1.21.1.
+
+Version specific code is marked inline with `//? if` comments, or handled as a rename in [stonecutter.gradle.kts](./stonecutter.gradle.kts) when nothing but a name changed.
 
 ## Credits
 
