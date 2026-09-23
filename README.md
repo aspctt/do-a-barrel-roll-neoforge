@@ -67,11 +67,11 @@ Pick the jar matching your Minecraft version:
 
 | Minecraft | NeoForge | YACL, optional |
 | --- | --- | --- |
-| 1.21.1 | 21.1.0 or newer | 3.6.0 or newer |
-| 1.21.11 | 21.11.0 or newer | 3.8.1 or newer |
-| 26.1, 26.1.1, 26.1.2 | 26.1.0 or newer | 3.9.5 or newer |
-| 26.2 | 26.2.0 or newer | 3.9.5 or newer |
-| 26.3 | 26.3.0 or newer | 3.9.7 or newer |
+| 1.21.1 | 21.1.217 or newer | 3.6.0 or newer |
+| 1.21.11 | 21.11.45 or newer | 3.8.1 or newer |
+| 26.1, 26.1.1, 26.1.2 | 26.1.0.19-beta or newer | 3.9.5 or newer |
+| 26.2 | 26.2.0.76 or newer | 3.9.5 or newer |
+| 26.3 | 26.3.0.12-beta or newer | 3.9.7 or newer |
 
 The 26.1 jar covers the whole 26.1.x line. Drop the JAR in your `mods` folder. Nothing else is required.
 
@@ -139,6 +139,8 @@ python tools/check-mixin-targets.py
 python tools/check-linkage.py 26.1 26.1.0.19-beta
 python tools/check-mixin-targets.py 26.1 --neoforge 26.1.0.19-beta
 ```
+
+Each NeoForge minimum in `versions/<target>/gradle.properties` is a build these checks have passed on. Lowering one should come with the same checks against the new floor, and the list of floors in `.github/workflows/build.yml` should match.
 
 ## Credits
 

@@ -42,6 +42,21 @@ jobs:
       - name: Check mixin targets
         run: python3 tools/check-mixin-targets.py
 
+      # One jar per target, but a target accepts older NeoForge builds than it compiles against, and 26.1
+      # accepts older Minecraft too. Each is checked at the oldest build its metadata lets it load on.
+      # 1.21.11 and 26.3 start at the build they compile against, which the step above already covers.
+      - name: Check each jar at the oldest build it accepts
+        run: |
+          check() {
+            ./gradlew ":$1:writeCompileClasspath" -Pneo_version="$2" -Pminecraft_version="$3" --stacktrace
+            python3 tools/check-linkage.py "$1" "$2"
+            python3 tools/check-mixin-targets.py "$1" --neoforge "$2"
+          }
+          check 1.21.1 21.1.217 1.21.1
+          check 26.1 26.1.0.19-beta 26.1
+          check 26.1 26.1.1.15-beta 26.1.1
+          check 26.2 26.2.0.76 26.2
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
