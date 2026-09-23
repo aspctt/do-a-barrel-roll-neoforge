@@ -19,7 +19,7 @@ jobs:
         with:
           ref: ${{ inputs.branch }}
 
-      # Two toolchains, because 1.21.1 and 1.21.11 build on Java 21 and 26.1 and 26.2 on Java 25.
+      # Two toolchains, because 1.21.1 and 1.21.11 build on Java 21 and 26.1 onward on Java 25.
       # Gradle picks the right one per target from the versions declared in build.gradle.kts.
       - name: Set up Java
         uses: actions/setup-java@v4
