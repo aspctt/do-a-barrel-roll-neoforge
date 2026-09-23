@@ -6,7 +6,6 @@ import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
 import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
 import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
@@ -25,6 +24,7 @@ import nl.enjarai.doabarrelroll.config.*;
 import nl.enjarai.doabarrelroll.math.ExpressionParser;
 import nl.enjarai.doabarrelroll.net.ClientNetworking;
 import nl.enjarai.doabarrelroll.net.ServerNetworking;
+import nl.enjarai.doabarrelroll.util.LinkUtil;
 import nl.enjarai.doabarrelroll.util.ModPermissions;
 import nl.enjarai.doabarrelroll.util.ScreenUtil;
 
@@ -223,7 +223,7 @@ public class YACLImplementation {
                                             var client = Minecraft.getInstance();
                                             ScreenUtil.setScreen(client, new ConfirmScreen((result) -> {
                                                 if (result) {
-                                                    Util.getPlatform().openUri(URI.create("https://discord.gg/WcYsDDQtyR"));
+                                                    LinkUtil.openUri(URI.create("https://discord.gg/WcYsDDQtyR"));
                                                 }
                                                 ScreenUtil.setScreen(client, screen);
                                             }, getText("documentation", "get_help"), getText("documentation", "get_help.confirm"), CommonComponents.GUI_YES, CommonComponents.GUI_NO));

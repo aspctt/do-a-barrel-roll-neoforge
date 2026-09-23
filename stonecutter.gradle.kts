@@ -42,5 +42,12 @@ stonecutter parameters {
             replace("import net.minecraft.client.gui.GuiGraphics;", "import net.minecraft.client.gui.GuiGraphicsExtractor;")
             replace("GuiGraphics ", "GuiGraphicsExtractor ")
         }
+
+        string(current.parsed >= "26.3") {
+            // 26.3 moved input from GLFW to SDL3 and renamed the keyboard key type to match. The
+            // InputConstants.KEY_ constants carry the new codes and the key names stored in options.txt
+            // are unchanged, so existing bindings carry over.
+            replace("InputConstants.Type.KEYSYM", "InputConstants.Type.KEYBOARD")
+        }
     }
 }

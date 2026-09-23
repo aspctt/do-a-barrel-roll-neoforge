@@ -11,7 +11,6 @@ import nl.enjarai.doabarrelroll.config.ModConfig;
 import nl.enjarai.doabarrelroll.config.ModConfigScreen;
 import nl.enjarai.doabarrelroll.net.ClientNetworking;
 import nl.enjarai.doabarrelroll.util.ScreenUtil;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
 
@@ -30,7 +29,7 @@ public class ModKeybindings {
             "key.do_a_barrel_roll.toggle_enabled",
             KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYSYM,
-            GLFW.GLFW_KEY_I,
+            InputConstants.KEY_I,
             CATEGORY
     );
     public static final KeyMapping TOGGLE_THRUST = new KeyMapping(
@@ -52,11 +51,11 @@ public class ModKeybindings {
     // on the strafe keys without conflicting with them outside of flight.
     public static final KeyMapping PITCH_UP = movementKey("pitch_up", InputConstants.UNKNOWN.getValue());
     public static final KeyMapping PITCH_DOWN = movementKey("pitch_down", InputConstants.UNKNOWN.getValue());
-    public static final KeyMapping YAW_LEFT = movementKey("yaw_left", GLFW.GLFW_KEY_A);
-    public static final KeyMapping YAW_RIGHT = movementKey("yaw_right", GLFW.GLFW_KEY_D);
+    public static final KeyMapping YAW_LEFT = movementKey("yaw_left", InputConstants.KEY_A);
+    public static final KeyMapping YAW_RIGHT = movementKey("yaw_right", InputConstants.KEY_D);
     public static final KeyMapping ROLL_LEFT = movementKey("roll_left", InputConstants.UNKNOWN.getValue());
     public static final KeyMapping ROLL_RIGHT = movementKey("roll_right", InputConstants.UNKNOWN.getValue());
-    public static final KeyMapping THRUST_FORWARD = movementKey("thrust_forward", GLFW.GLFW_KEY_W);
+    public static final KeyMapping THRUST_FORWARD = movementKey("thrust_forward", InputConstants.KEY_W);
     public static final KeyMapping THRUST_BACKWARD = movementKey("thrust_backward", InputConstants.UNKNOWN.getValue());
 
     public static final List<KeyMapping> ALL = List.of(
