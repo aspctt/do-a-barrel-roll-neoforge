@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/Available_for-1.21.1_--_26.2-blue)
+![Version](https://img.shields.io/badge/Available_for-1.21.1_--_26.3-blue)
 ![Requires](https://img.shields.io/badge/Requires-Nothing-brightgreen)
 ![License](https://img.shields.io/badge/License-GPL--3.0--only-red)
 
@@ -45,7 +45,7 @@ Install it on the server as well and playermodel roll is synced between clients.
 
 ### Requirements
 
-Minecraft 1.21.1, 1.21.11, 26.1 or 26.2, each with the matching NeoForge. The 26.1 jar covers 26.1, 26.1.1 and 26.1.2. YACL is optional, for the config screen.
+Minecraft 1.21.1, 1.21.11, 26.1, 26.2 or 26.3, each with the matching NeoForge. The 26.1 jar covers 26.1, 26.1.1 and 26.1.2. YACL is optional, for the config screen.
 
 ### License
 

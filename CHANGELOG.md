@@ -1,8 +1,8 @@
 # Changelog
 
-## 3.7.4, Minecraft 1.21.1, 1.21.11, 26.1 and 26.2
+## 3.7.4, Minecraft 1.21.1, 1.21.11, 26.1, 26.2 and 26.3
 
-Adds the three newer Minecraft versions alongside 1.21.1. One jar per API band, built from one source
+Adds the four newer Minecraft versions alongside 1.21.1. One jar per API band, built from one source
 tree with Stonecutter. The 26.1 jar covers 26.1, 26.1.1 and 26.1.2.
 
 - The debug screen roll readout is its own line from 1.21.11 on. That version turned the debug screen
@@ -15,7 +15,11 @@ tree with Stonecutter. The 26.1 jar covers 26.1, 26.1.1 and 26.1.2.
 - Keybinding categories are registered ids from 1.21.11 on, so the lang files carry both spellings of
   the category keys.
 - Everything a player interacts with is unchanged, and configs, keybinds, permission nodes and the
-  server handshake keep their names across all four versions.
+  server handshake keep their names across all five versions.
+- 26.3 moved input from GLFW to SDL3. Default keybinds use the new key codes, and bindings already
+  saved in options.txt carry over because the key names did not change.
+- On 26.3, jumps made in lava do not count towards triple jump or hybrid activation. Vanilla 26.3
+  refuses to start gliding in lava as well as water, and the activation check follows it.
 - Ships this project's own mod icon rather than the one inherited from upstream.
 
 ## 3.7.3+1.21.1

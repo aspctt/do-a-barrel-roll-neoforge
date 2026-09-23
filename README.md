@@ -4,7 +4,7 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/Available_for-1.21.1_--_26.2-blue)
+![Version](https://img.shields.io/badge/Available_for-1.21.1_--_26.3-blue)
 ![Requires](https://img.shields.io/badge/Requires-Nothing-brightgreen)
 ![License](https://img.shields.io/badge/License-GPL--3.0--only-red)
 
@@ -71,6 +71,7 @@ Pick the jar matching your Minecraft version:
 | 1.21.11 | 21.11.0 or newer | 3.8.1 or newer |
 | 26.1, 26.1.1, 26.1.2 | 26.1.0 or newer | 3.9.5 or newer |
 | 26.2 | 26.2.0 or newer | 3.9.5 or newer |
+| 26.3 | 26.3.0 or newer | 3.9.7 or newer |
 
 The 26.1 jar covers the whole 26.1.x line. Drop the JAR in your `mods` folder. Nothing else is required.
 

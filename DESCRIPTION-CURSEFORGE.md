@@ -1,7 +1,7 @@
 <h1 style="text-align: center;"> Do Another Barrel Roll </h1>
 
 <p style="text-align: center;">
-	<img src="https://img.shields.io/badge/Available_for-1.21.1_--_26.2-blue" alt="Version">
+	<img src="https://img.shields.io/badge/Available_for-1.21.1_--_26.3-blue" alt="Version">
 	<img src="https://img.shields.io/badge/Requires-Nothing-brightgreen" alt="Requires">
 	<img src="https://img.shields.io/badge/License-GPL--3.0--only-red" alt="License">
 </p>
@@ -45,7 +45,7 @@
 
 <h3>Requirements</h3>
 
-<p>Minecraft 1.21.1, 1.21.11, 26.1 or 26.2, each with the matching NeoForge. The 26.1 jar covers 26.1, 26.1.1 and 26.1.2. YACL is optional, for the config screen.</p>
+<p>Minecraft 1.21.1, 1.21.11, 26.1, 26.2 or 26.3, each with the matching NeoForge. The 26.1 jar covers 26.1, 26.1.1 and 26.1.2. YACL is optional, for the config screen.</p>
 
 <h3>License</h3>
 
