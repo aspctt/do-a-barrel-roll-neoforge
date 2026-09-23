@@ -116,7 +116,7 @@ Everything a player interacts with is the same. What changed underneath:
 
 ## Building
 
-All four Minecraft versions are built from one source tree with [Stonecutter](https://stonecutter.kikugie.dev/). Each target is declared in [settings.gradle.kts](./settings.gradle.kts), with its Minecraft, NeoForge and YACL versions in `versions/<target>/gradle.properties`.
+All five Minecraft versions are built from one source tree with [Stonecutter](https://stonecutter.kikugie.dev/). Each target is declared in [settings.gradle.kts](./settings.gradle.kts), with its Minecraft, NeoForge and YACL versions in `versions/<target>/gradle.properties`.
 
 ```bash
 ./gradlew buildAll
@@ -125,6 +125,20 @@ All four Minecraft versions are built from one source tree with [Stonecutter](ht
 That writes one jar per target under `versions/<target>/build/libs/`. To work on a single version, run `./gradlew "26.2:build"`, or switch the source tree over with the "Set active project to ..." tasks so the IDE resolves against that version. Run `Reset active project` before committing, so the tree goes back to 1.21.1.
 
 Version specific code is marked inline with `//? if` comments, or handled as a rename in [stonecutter.gradle.kts](./stonecutter.gradle.kts) when nothing but a name changed.
+
+### Checks
+
+Two kinds of mistake compile cleanly and still fail in the game, so both are checked against the game's own bytecode with `javap`. CI runs them on every build.
+
+* **Mixin targets.** A mixin names its targets in strings javac never looks at. `tools/check-mixin-targets.py` confirms every injected method, accessor and shadowed field or method still exists on each target with the types the mixin expects, and that each injection handler's arguments still match.
+* **Older NeoForge builds.** A jar is compiled once, against one NeoForge build, but accepts older ones too. The 26.1 jar is built on 26.1.2 and also has to run on 26.1 and 26.1.1. `tools/check-linkage.py` reads every game method, field and class the jar uses and checks each one exists in the oldest build it accepts.
+
+```bash
+python tools/check-mixin-targets.py
+./gradlew :26.1:writeCompileClasspath -Pneo_version=26.1.0.19-beta -Pminecraft_version=26.1
+python tools/check-linkage.py 26.1 26.1.0.19-beta
+python tools/check-mixin-targets.py 26.1 --neoforge 26.1.0.19-beta
+```
 
 ## Credits
 

@@ -38,6 +38,10 @@ jobs:
       - name: Build every Minecraft version
         run: ./gradlew buildAll --stacktrace
 
+      # Mixin targets are strings javac never checks, so each is checked against the game it will be applied to.
+      - name: Check mixin targets
+        run: python3 tools/check-mixin-targets.py
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
