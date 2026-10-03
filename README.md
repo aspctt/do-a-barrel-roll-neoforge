@@ -153,3 +153,7 @@ Native NeoForge port by aspctt.
 ## Licensing
 
 GPL-3.0-only, the same licence as upstream. The full terms are in [LICENSE](./LICENSE).
+
+<p align=center>
+	<a alt="BuyMeACoffee" href="https://buymeacoffee.com/aspctt"><img src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/donate/buymeacoffee-singular_vector.svg"></a>
+</p>
