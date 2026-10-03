@@ -52,3 +52,7 @@
 <p>GPL-3.0-only, the same licence as upstream. The full terms are in <a href="https://github.com/aspctt/do-a-barrel-roll-neoforge/blob/main/LICENSE">LICENSE</a>.</p>
 
 <p>Do a Barrel Roll is by <a href="https://github.com/enjarai">enjarai</a>, based on <a href="https://github.com/Jorbon/cool_elytra">Cool Elytra Roll</a> by Jorbon. Mod icon by Mizeno. Native NeoForge port by aspctt.</p>
+
+<p style="text-align: center;">
+	<a alt="BuyMeACoffee" href="https://buymeacoffee.com/aspctt"><img src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/donate/buymeacoffee-singular_vector.svg"></a>
+</p>

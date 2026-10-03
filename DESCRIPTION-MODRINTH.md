@@ -52,3 +52,9 @@ Minecraft 1.21.1, 1.21.11, 26.1, 26.2 or 26.3, each with the matching NeoForge. 
 GPL-3.0-only, the same licence as upstream. The full terms are in [LICENSE](https://github.com/aspctt/do-a-barrel-roll-neoforge/blob/main/LICENSE).
 
 Do a Barrel Roll is by [enjarai](https://github.com/enjarai), based on [Cool Elytra Roll](https://github.com/Jorbon/cool_elytra) by Jorbon. Mod icon by Mizeno. Native NeoForge port by aspctt.
+
+<div align="center">
+
+[![BuyMeACoffee](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/donate/buymeacoffee-singular_vector.svg)](https://buymeacoffee.com/aspctt)
+
+</div>
