@@ -7,14 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.7.5] - 2026-11-12
+
+### Added
+
+- Operator Bypass server setting (`operatorBypass`), off by default. When on, level 2 operators and players with the `do_a_barrel_roll.ignore_config` permission ignore `allowThrusting` and `forceEnabled`. Upstream documented this bypass but never applied it
+
 ### Changed
 
 - Each jar requires the oldest NeoForge build it has been checked against: 21.1.217, 21.11.45, 26.1.0.19-beta, 26.2.0.76 and 26.3.0.12-beta
+- The forced install kick message names Do Another Barrel Roll instead of upstream's Fabric release
 
 ### Fixed
 
 - Thrust works when the thrust key is already held as you take off, instead of needing a fresh press mid-flight
 - Thrust no longer fires on its own at the start of a flight after landing with the thrust key held
+- Server tab changes made from the main menu are saved instead of being lost when the game closes
+- The installed timeout slider starts at 1, since a value of 0 was rejected by servers and reset the whole server config when saved
+- Roll sync and Server tab changes are no longer dropped while the server re-sends its config, and a player who already passed the forced install check is not kicked over a slow reply to a re-send
+- A player who leaves before the forced install check no longer gets a kick fired at their closed connection
+- The installed timeout description says ticks rather than seconds
 
 ## [3.7.4] - 2026-09-09
 
@@ -51,6 +63,7 @@ First release of the native NeoForge port, forked from Do a Barrel Roll 3.7.3.
 - Fabric API, Forgified Fabric API, CICADA, Mod Menu and the Fabric permissions API, with nothing in their place
 - Controller support, since upstream's Controlify integration is a Fabric entrypoint and was already missing from its NeoForge build
 
-[Unreleased]: https://github.com/aspctt/do-a-barrel-roll-neoforge/compare/3.7.4...HEAD
+[Unreleased]: https://github.com/aspctt/do-a-barrel-roll-neoforge/compare/3.7.5...HEAD
+[3.7.5]: https://github.com/aspctt/do-a-barrel-roll-neoforge/compare/3.7.4...3.7.5
 [3.7.4]: https://github.com/aspctt/do-a-barrel-roll-neoforge/compare/3.7.3...3.7.4
 [3.7.3]: https://github.com/aspctt/do-a-barrel-roll-neoforge/releases/tag/3.7.3
