@@ -107,12 +107,15 @@ publishMods {
     }
 }
 
-// The targets attach their jars to the GitHub release one at a time, oldest Minecraft version first, so
-// the release lists them in that order. Left alone, parallel execution uploads them in whatever order the
-// workers finish. Wired once every target has been evaluated, since each one creates its own task.
+// On each platform the targets upload one at a time, oldest Minecraft version first, so the GitHub release
+// lists its jars in that order and the newest version ends up on top of each portal's file list. Left
+// alone, parallel execution uploads them in whatever order the workers finish. The platforms still run
+// alongside each other. Wired once every target has been evaluated, since each one creates its own tasks.
 gradle.projectsEvaluated {
-    val githubUploads = stonecutter.versions.map { project(":${it.project}").tasks.named("publishGithub") }
-    githubUploads.zipWithNext { earlier, later ->
-        later.configure { mustRunAfter(earlier) }
+    for (taskName in listOf("publishGithub", "publishModrinth", "publishCurseforge")) {
+        val uploads = stonecutter.versions.map { project(":${it.project}").tasks.named(taskName) }
+        uploads.zipWithNext { earlier, later ->
+            later.configure { mustRunAfter(earlier) }
+        }
     }
 }
