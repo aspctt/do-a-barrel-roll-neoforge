@@ -6,6 +6,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import nl.enjarai.doabarrelroll.api.RollEntity;
 import nl.enjarai.doabarrelroll.net.packet.ConfigSyncS2CPacket;
 import nl.enjarai.doabarrelroll.net.packet.ConfigUpdateAckS2CPacket;
+import nl.enjarai.doabarrelroll.net.packet.OperatorBypassSyncS2CPacket;
 import nl.enjarai.doabarrelroll.net.packet.RollSyncS2CPacket;
 
 /**
@@ -33,6 +34,12 @@ public class ClientPayloadHandlers {
         var rollEntity = (RollEntity) entity;
         rollEntity.doABarrelRoll$setRolling(payload.rolling());
         rollEntity.doABarrelRoll$setRoll(Mth.wrapDegrees(payload.roll()));
+    }
+
+    public static void handleOperatorBypassSync(OperatorBypassSyncS2CPacket payload) {
+        if (!ClientNetworking.HANDSHAKE_CLIENT.hasConnected()) return;
+
+        ClientNetworking.HANDSHAKE_CLIENT.setOperatorBypass(payload.operatorBypass());
     }
 
     public static void handleConfigUpdateAck(ConfigUpdateAckS2CPacket payload) {

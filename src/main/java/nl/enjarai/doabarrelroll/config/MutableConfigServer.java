@@ -6,6 +6,7 @@ public class MutableConfigServer {
     public boolean forceInstalled;
     public int installedTimeout;
     public KineticDamage kineticDamage;
+    public boolean operatorBypass;
 
     public MutableConfigServer(ModConfigServer config) {
         this.allowThrusting = config.allowThrusting();
@@ -13,13 +14,14 @@ public class MutableConfigServer {
         this.forceInstalled = config.forceInstalled();
         this.installedTimeout = config.installedTimeout();
         this.kineticDamage = config.kineticDamage();
+        this.operatorBypass = config.operatorBypass();
     }
 
     public ModConfigServer toImmutable() {
         return new ModConfigServer(
                 this.allowThrusting, this.forceEnabled,
                 this.forceInstalled, this.installedTimeout,
-                this.kineticDamage
+                this.kineticDamage, this.operatorBypass
         );
     }
 }

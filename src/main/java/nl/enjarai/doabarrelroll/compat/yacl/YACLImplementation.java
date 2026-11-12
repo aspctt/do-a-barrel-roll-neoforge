@@ -251,10 +251,15 @@ public class YACLImplementation {
         var fullServerConfig = inWorld
                 ? ClientNetworking.HANDSHAKE_CLIENT.getFullConfig()
                 : Optional.of(ServerNetworking.CONFIG_HOLDER.instance);
+        // operatorBypass is not part of the synced config, so in a world it is only known when the
+        // server sent it on its own channel. A server from before the setting never does.
+        var serverOperatorBypass = inWorld
+                ? ClientNetworking.HANDSHAKE_CLIENT.getOperatorBypass()
+                : Optional.of(ServerNetworking.CONFIG_HOLDER.instance.operatorBypass());
         MutableConfigServer mut;
         if (fullServerConfig.isPresent()) {
             mut = new MutableConfigServer(fullServerConfig.get());
-            builder.category(ConfigCategory.createBuilder()
+            var serverCategory = ConfigCategory.createBuilder()
                     .name(getText("server"))
                     .option(LabelOption.create(getText("server", "description")))
                     .option(getBooleanOption("server", "force_enabled", true, false)
@@ -286,8 +291,18 @@ public class YACLImplementation {
                                             .valueFormatter(kd -> getText("gameplay", "kinetic_damage." + kd.name().toLowerCase(Locale.ROOT))))
                                     .binding(ModConfigServer.DEFAULT.kineticDamage(), () -> mut.kineticDamage, value -> mut.kineticDamage = value)
                                     .build())
-                            .build())
-                    .build());
+                            .build());
+
+            // Left out where the server cannot be told about it, rather than shown with a value that
+            // would be ignored. A category's own options always list above its groups.
+            if (serverOperatorBypass.isPresent()) {
+                mut.operatorBypass = serverOperatorBypass.get();
+                serverCategory.option(getBooleanOption("server", "operator_bypass", true, false)
+                        .binding(ModConfigServer.DEFAULT.operatorBypass(), () -> mut.operatorBypass, value -> mut.operatorBypass = value)
+                        .build());
+            }
+
+            builder.category(serverCategory.build());
         } else mut = null;
 
         Consumer<LimitedModConfigServer> configListener = config -> {
@@ -314,6 +329,12 @@ public class YACLImplementation {
                                     ClientNetworking.sendConfigUpdatePacket(imut);
                                     configListener.accept(imut);
                                 }
+                            }
+
+                            // The config update above cannot carry operatorBypass, so a change goes separately
+                            var originalOperatorBypass = ClientNetworking.HANDSHAKE_CLIENT.getOperatorBypass();
+                            if (originalOperatorBypass.isPresent() && originalOperatorBypass.get() != mut.operatorBypass) {
+                                ClientNetworking.sendOperatorBypassPacket(mut.operatorBypass);
                             }
                         }
                     }

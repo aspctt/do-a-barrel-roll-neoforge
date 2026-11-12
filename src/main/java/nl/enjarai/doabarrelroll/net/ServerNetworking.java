@@ -12,6 +12,7 @@ import nl.enjarai.doabarrelroll.api.event.ServerEvents;
 import nl.enjarai.doabarrelroll.config.ModConfigServer;
 import nl.enjarai.doabarrelroll.net.packet.ConfigSyncS2CPacket;
 import nl.enjarai.doabarrelroll.net.packet.ConfigUpdateAckS2CPacket;
+import nl.enjarai.doabarrelroll.net.packet.OperatorBypassSyncS2CPacket;
 import nl.enjarai.doabarrelroll.net.packet.RollSyncS2CPacket;
 
 public class ServerNetworking {
@@ -49,6 +50,13 @@ public class ServerNetworking {
 
         if (NetworkRegistry.hasChannel(player.connection, ConfigSyncS2CPacket.PACKET_ID.id())) {
             PacketDistributor.sendToPlayer(player, payload);
+
+            // Only players who get the full config can edit it, so only they are told operatorBypass.
+            // It goes second because the config sync resets what the client knows about the server.
+            boolean isLimited = HANDSHAKE_SERVER.getHandshakeState(player).isLimited;
+            if (!isLimited && NetworkRegistry.hasChannel(player.connection, OperatorBypassSyncS2CPacket.PACKET_ID.id())) {
+                PacketDistributor.sendToPlayer(player, new OperatorBypassSyncS2CPacket(CONFIG_HOLDER.instance.operatorBypass()));
+            }
         }
 
         HANDSHAKE_SERVER.configSentToClient(player.connection);
@@ -86,7 +94,7 @@ public class ServerNetworking {
         for (var player : level.players()) {
             if (player == entity) continue;
             if (player.distanceToSqr(entity) > rangeSq) continue;
-            if (HANDSHAKE_SERVER.getHandshakeState(player).state != HandshakeServer.HandshakeState.ACCEPTED) continue;
+            if (!HANDSHAKE_SERVER.getHandshakeState(player).hasAccepted) continue;
             if (!NetworkRegistry.hasChannel(player.connection, RollSyncS2CPacket.PACKET_ID.id())) continue;
 
             PacketDistributor.sendToPlayer(player, payload);

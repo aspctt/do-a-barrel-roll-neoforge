@@ -15,6 +15,8 @@ public class HandshakeClient<P extends ConfigResponseC2SPacket> {
     private final Consumer<LimitedModConfigServer> updateCallback;
     private LimitedModConfigServer serverConfig = null;
     private ModConfigServer fullServerConfig = null;
+    // Null until the server says, which a server from before the setting never does
+    private Boolean operatorBypass = null;
     private boolean hasConnected = false;
 
     public HandshakeClient(BiFunction<Integer, Boolean, P> responseConstructor, Consumer<LimitedModConfigServer> updateCallback) {
@@ -34,6 +36,18 @@ public class HandshakeClient<P extends ConfigResponseC2SPacket> {
         return Optional.ofNullable(fullServerConfig);
     }
 
+    /**
+     * The server's operatorBypass setting, present only for players allowed to edit the server config
+     * on a server new enough to have it.
+     */
+    public Optional<Boolean> getOperatorBypass() {
+        return Optional.ofNullable(operatorBypass);
+    }
+
+    public void setOperatorBypass(boolean operatorBypass) {
+        this.operatorBypass = operatorBypass;
+    }
+
 //    public void setConfig(@Nullable L config) {
 //        serverConfig = config;
 //        updateCallback.accept(serverConfig);
@@ -47,6 +61,9 @@ public class HandshakeClient<P extends ConfigResponseC2SPacket> {
     public P handleConfigSync(ConfigSyncS2CPacket packet) {
         serverConfig = null;
         fullServerConfig = null;
+        // Cleared with the rest so a player who lost the right to edit stops seeing it. The server
+        // sends it again straight after this packet to anyone who still may.
+        operatorBypass = null;
 
         var protocolVersion = packet.protocolVersion();
         if (protocolVersion < 4) {
@@ -70,6 +87,7 @@ public class HandshakeClient<P extends ConfigResponseC2SPacket> {
 
     public void reset() {
         serverConfig = null;
+        operatorBypass = null;
         hasConnected = false;
     }
 }

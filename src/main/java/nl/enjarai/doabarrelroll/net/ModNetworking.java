@@ -10,6 +10,8 @@ import nl.enjarai.doabarrelroll.net.packet.ConfigResponseC2SPacket;
 import nl.enjarai.doabarrelroll.net.packet.ConfigSyncS2CPacket;
 import nl.enjarai.doabarrelroll.net.packet.ConfigUpdateAckS2CPacket;
 import nl.enjarai.doabarrelroll.net.packet.ConfigUpdateC2SPacket;
+import nl.enjarai.doabarrelroll.net.packet.OperatorBypassSyncS2CPacket;
+import nl.enjarai.doabarrelroll.net.packet.OperatorBypassUpdateC2SPacket;
 import nl.enjarai.doabarrelroll.net.packet.RollSyncC2SPacket;
 import nl.enjarai.doabarrelroll.net.packet.RollSyncS2CPacket;
 
@@ -95,10 +97,30 @@ public class ModNetworking {
                     context.reply(ServerNetworking.CONFIG_HOLDER.clientSendsUpdate(player, payload));
                 })
         );
+
+        // operatorBypass has channels of its own rather than a field in the config payloads above, so
+        // that a side without them just loses the setting instead of failing to connect. A channel
+        // missing on one side is dropped from an optional registrar, while a payload that differs is
+        // refused.
+        registrar.playToClient(
+                OperatorBypassSyncS2CPacket.PACKET_ID,
+                OperatorBypassSyncS2CPacket.PACKET_CODEC,
+                (payload, context) -> context.enqueueWork(() -> ClientPayloadHandlers.handleOperatorBypassSync(payload))
+        );
+
+        registrar.playToServer(
+                OperatorBypassUpdateC2SPacket.PACKET_ID,
+                OperatorBypassUpdateC2SPacket.PACKET_CODEC,
+                (payload, context) -> context.enqueueWork(() -> {
+                    var player = (ServerPlayer) context.player();
+                    if (!hasAcceptedHandshake(player)) return;
+
+                    context.reply(ServerNetworking.CONFIG_HOLDER.clientSendsOperatorBypass(player, payload));
+                })
+        );
     }
 
     private static boolean hasAcceptedHandshake(ServerPlayer player) {
-        return ServerNetworking.HANDSHAKE_SERVER.getHandshakeState(player).state
-                == HandshakeServer.HandshakeState.ACCEPTED;
+        return ServerNetworking.HANDSHAKE_SERVER.getHandshakeState(player).hasAccepted;
     }
 }

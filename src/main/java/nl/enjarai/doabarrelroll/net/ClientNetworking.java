@@ -38,4 +38,11 @@ public class ClientNetworking {
         //?} else
         /*ClientPacketDistributor.sendToServer(CONFIG_UPDATE_CLIENT.prepUpdatePacket(config));*/
     }
+
+    public static void sendOperatorBypassPacket(boolean operatorBypass) {
+        //? if <1.21.11 {
+        PacketDistributor.sendToServer(CONFIG_UPDATE_CLIENT.prepOperatorBypassPacket(operatorBypass));
+        //?} else
+        /*ClientPacketDistributor.sendToServer(CONFIG_UPDATE_CLIENT.prepOperatorBypassPacket(operatorBypass));*/
+    }
 }

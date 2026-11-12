@@ -4,6 +4,7 @@ import nl.enjarai.doabarrelroll.DoABarrelRoll;
 import nl.enjarai.doabarrelroll.config.ModConfigServer;
 import nl.enjarai.doabarrelroll.net.packet.ConfigUpdateAckS2CPacket;
 import nl.enjarai.doabarrelroll.net.packet.ConfigUpdateC2SPacket;
+import nl.enjarai.doabarrelroll.net.packet.OperatorBypassUpdateC2SPacket;
 import nl.enjarai.doabarrelroll.util.ToastUtil;
 
 public class ServerConfigUpdateClient<P extends ConfigUpdateC2SPacket> {
@@ -17,6 +18,12 @@ public class ServerConfigUpdateClient<P extends ConfigUpdateC2SPacket> {
     public P prepUpdatePacket(ModConfigServer config) {
         waitingForAck = true;
         return packetConstructor.construct(HandshakeServer.PROTOCOL_VERSION, config);
+    }
+
+    // Shares the acknowledgement with a config update, so a save that sends both shows one toast
+    public OperatorBypassUpdateC2SPacket prepOperatorBypassPacket(boolean operatorBypass) {
+        waitingForAck = true;
+        return new OperatorBypassUpdateC2SPacket(operatorBypass);
     }
 
     public void updateAcknowledged(ConfigUpdateAckS2CPacket packet) {

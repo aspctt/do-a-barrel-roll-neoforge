@@ -67,7 +67,7 @@
   "config.do_a_barrel_roll.server.force_installed": "Forzar el mod",
   "config.do_a_barrel_roll.server.force_installed.description": "Obliga a que el mod esté instalado para todos los jugadores en el servidor. Esto expulsará a cualquier jugador que no tenga el mod cargado.\n",
   "config.do_a_barrel_roll.server.installed_timeout": "Tiempo de espera de verificación de instalación",
-  "config.do_a_barrel_roll.server.installed_timeout.description": "La cantidad de tiempo en segundos que el servidor esperará a que un cliente responda al saludo antes de expulsarlo. §lAumenta esto si los jugadores con conexiones lentas están siendo expulsados a pesar de tener el mod instalado.\n",
+  "config.do_a_barrel_roll.server.installed_timeout.description": "La cantidad de tiempo en ticks (20 por segundo) que el servidor esperará a que un cliente responda al saludo antes de expulsarlo. §lAumenta esto si los jugadores con conexiones lentas están siendo expulsados a pesar de tener el mod instalado.\n",
   "config.do_a_barrel_roll.gameplay": "Jugabilidad",
   "config.do_a_barrel_roll.gameplay.allow_thrusting": "Permitir Aceleración",
   "config.do_a_barrel_roll.gameplay.allow_thrusting.description": "Permite a los jugadores usar las teclas de avance y retroceso (W y S por defecto)  para acelerar y desacelerar infinitamente respectivamente.\n",

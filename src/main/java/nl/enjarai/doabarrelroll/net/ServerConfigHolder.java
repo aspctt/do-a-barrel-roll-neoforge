@@ -11,6 +11,7 @@ import nl.enjarai.doabarrelroll.DoABarrelRoll;
 import nl.enjarai.doabarrelroll.config.ModConfigServer;
 import nl.enjarai.doabarrelroll.net.packet.ConfigUpdateAckS2CPacket;
 import nl.enjarai.doabarrelroll.net.packet.ConfigUpdateC2SPacket;
+import nl.enjarai.doabarrelroll.net.packet.OperatorBypassUpdateC2SPacket;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -84,7 +85,7 @@ public class ServerConfigHolder<P extends ConfigUpdateAckS2CPacket> {
 
     public P clientSendsUpdate(ServerPlayer player, ConfigUpdateC2SPacket packet) {
         var info = handshakeServer.getHandshakeState(player);
-        var accepted = info.state == HandshakeServer.HandshakeState.ACCEPTED;
+        var accepted = info.hasAccepted;
         var hasPermission = ModConfigServer.canModify(player.connection);
 
         // Only players that have accepted the handshake and have permission can update the config
@@ -107,7 +108,9 @@ public class ServerConfigHolder<P extends ConfigUpdateAckS2CPacket> {
                 );
             }
 
-            var newConfig = packet.config();
+            // The update payload has no room for operatorBypass, so the client's copy only holds the
+            // default. Taking it as sent would switch the bypass off on every edit from the Server tab.
+            var newConfig = packet.config().withOperatorBypass(instance.operatorBypass());
 
             if (!newConfig.isValid()) {
                 throw new RuntimeException("Config arrived, but contains invalid values");
@@ -131,6 +134,34 @@ public class ServerConfigHolder<P extends ConfigUpdateAckS2CPacket> {
             );
             return packetConstructor.construct(HandshakeServer.PROTOCOL_VERSION, false);
         }
+    }
+
+    /**
+     * Applies an operatorBypass change from the Server tab, under the same rules as a config update:
+     * only players who accepted the handshake and may configure the server get through.
+     */
+    public P clientSendsOperatorBypass(ServerPlayer player, OperatorBypassUpdateC2SPacket packet) {
+        var accepted = handshakeServer.getHandshakeState(player).hasAccepted;
+        if (!accepted || !ModConfigServer.canModify(player.connection)) {
+            DoABarrelRoll.LOGGER.warn(
+                    "Client of {} tried to change operator bypass, but is not allowed to. Rejecting.",
+                    player.getName().getString()
+            );
+            return packetConstructor.construct(HandshakeServer.PROTOCOL_VERSION, false);
+        }
+
+        DoABarrelRoll.LOGGER.info(
+                "{} turned operator bypass {}.",
+                player.getName().getString(),
+                packet.operatorBypass() ? "on" : "off"
+        );
+
+        // The update callback sends every player a fresh handshake, which is what hands operators
+        // their bypass, or takes it away, without them having to rejoin
+        instance = instance.withOperatorBypass(packet.operatorBypass());
+        updateCallback.accept(player.level().getServer(), instance);
+        save();
+        return packetConstructor.construct(HandshakeServer.PROTOCOL_VERSION, true);
     }
 
     public void setHandshakeServer(HandshakeServer<?> handshakeServer) {

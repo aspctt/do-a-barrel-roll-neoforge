@@ -75,8 +75,10 @@ public class HandshakeServer<P extends ConfigSyncS2CPacket> {
 
         var config = configHolder.instance;
         if (config.getSyncTimeout() != null) {
+            // A client that accepted once has the mod, so a slow reply to a later re-send is no
+            // reason to kick it
             scheduledKicks.put(handler, new DelayedRunnable(config.getSyncTimeout(), () -> {
-                if (getHandshakeState(handler).state != HandshakeState.ACCEPTED) {
+                if (!getHandshakeState(handler).hasAccepted) {
                     DoABarrelRoll.LOGGER.warn(
                             "{} did not accept config syncing, config indicates we kick them.",
                             handler.getPlayer().getName().getString()
@@ -108,11 +110,13 @@ public class HandshakeServer<P extends ConfigSyncS2CPacket> {
             } else if (packet.success()) {
                 DoABarrelRoll.LOGGER.info("Client of {} accepted server config.", player.getName().getString());
                 info.state = HandshakeState.ACCEPTED;
+                info.hasAccepted = true;
             } else {
                 DoABarrelRoll.LOGGER.warn(
                         "Client of {} failed to process server config, check client logs find what went wrong.",
                         player.getName().getString());
                 info.state = HandshakeState.FAILED;
+                info.hasAccepted = false;
             }
             info.protocolVersion = protocolVersion;
         }
@@ -134,6 +138,16 @@ public class HandshakeServer<P extends ConfigSyncS2CPacket> {
         public HandshakeState state;
         public int protocolVersion;
         public boolean isLimited;
+
+        /**
+         * Whether this connection has accepted a config, as opposed to state, which drops back to SENT
+         * every time the config is sent again. Whatever only needs to know the client runs the mod
+         * checks this. Upstream registered its receivers once on acceptance, so they stayed open
+         * through re-sends; checking state here instead dropped any packet that arrived while a
+         * re-send was out, such as the second half of a Server tab save, since the first half is what
+         * triggers the re-send.
+         */
+        public boolean hasAccepted;
 
         public ClientInfo(HandshakeState state, int protocolVersion, boolean isLimited) {
             this.state = state;

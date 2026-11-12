@@ -102,8 +102,9 @@ The server config includes a few other options:
 - `forceInstalled`: Rejects any player trying to join without having the mod installed on their client.
 - `installedTimeout`: The amount of time (in ticks) to wait for a client to respond to the config sync packet. Increase this if players with bad connections are getting kicked despite having the mod installed.
 - `kineticDamage`: How elytra wall impacts hurt, from vanilla through to disabled or instantly lethal.
+- `operatorBypass`: Lets level 2 operators and players with the `do_a_barrel_roll.ignore_config` permission ignore `allowThrusting` and `forceEnabled`. Off by default.
 
-Specific players can bypass configured restrictions with level 2 operator status or the `do_a_barrel_roll.ignore_config` permission. Both nodes are registered with NeoForge's permission API, so any permission handler mod can grant them.
+Both permission nodes, `do_a_barrel_roll.configure` and `do_a_barrel_roll.ignore_config`, are registered with NeoForge's permission API, so any permission handler mod can grant them. `operatorBypass` is new in this port. Upstream documented the bypass but never applied it, so it starts off and servers keep behaving as they always have until an admin turns it on.
 
 ## Differences from upstream
 
