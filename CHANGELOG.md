@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Each jar requires the oldest NeoForge build it has been checked against: 21.1.217, 21.11.45, 26.1.0.19-beta, 26.2.0.76 and 26.3.0.12-beta
 
+### Fixed
+
+- Thrust works when the thrust key is already held as you take off, instead of needing a fresh press mid-flight
+- Thrust no longer fires on its own at the start of a flight after landing with the thrust key held
+
 ## [3.7.4] - 2026-09-09
 
 ### Added
