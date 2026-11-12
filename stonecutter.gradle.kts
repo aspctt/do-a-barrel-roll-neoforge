@@ -106,3 +106,13 @@ publishMods {
         allowEmptyFiles = true
     }
 }
+
+// The targets attach their jars to the GitHub release one at a time, oldest Minecraft version first, so
+// the release lists them in that order. Left alone, parallel execution uploads them in whatever order the
+// workers finish. Wired once every target has been evaluated, since each one creates its own task.
+gradle.projectsEvaluated {
+    val githubUploads = stonecutter.versions.map { project(":${it.project}").tasks.named("publishGithub") }
+    githubUploads.zipWithNext { earlier, later ->
+        later.configure { mustRunAfter(earlier) }
+    }
+}

@@ -262,15 +262,21 @@ publishMods {
     curseforge {
         accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
         projectId = "1679647"
-        // The earlier files are titled with the version alone, such as "3.7.4+26.3"
+        // Titled with the same version number as on Modrinth, such as "3.7.5+26.3"
         displayName = project.version.toString()
         minecraftVersions.addAll(releaseMinecraftVersions)
         client = true
         server = true
+        changelogType = "markdown"
         optional("yacl")
+        // CurseForge files an additional file under the main one it was uploaded with
+        additionalFile(tasks.named("sourcesJar")) {
+            name = "${project.version}-sources"
+        }
     }
 
-    // Only the main jar goes on GitHub, as with the earlier releases
+    // Only the main jar goes on GitHub, as with the earlier releases. The root project orders these
+    // uploads from the oldest Minecraft version to the newest.
     github {
         accessToken = providers.environmentVariable("GITHUB_TOKEN")
         parent(rootProject.tasks.named("publishGithub"))
