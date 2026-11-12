@@ -264,8 +264,10 @@ public class YACLImplementation {
                             .binding(ModConfigServer.DEFAULT.forceInstalled(), () -> mut.forceInstalled, value -> mut.forceInstalled = value)
                             .build())
                     .option(getOption(Integer.class, "server", "installed_timeout", true, false)
+                            // Starts at 1 because ModConfigServer.isValid rejects 0. A server refused such
+                            // an update outright, and a saved one reset the whole server config on load.
                             .controller(option -> IntegerSliderControllerBuilder.create(option)
-                                    .range(0, 100)
+                                    .range(1, 100)
                                     .step(1))
                             .binding(ModConfigServer.DEFAULT.installedTimeout(), () -> mut.installedTimeout, value -> mut.installedTimeout = value)
                             .build())
@@ -300,7 +302,10 @@ public class YACLImplementation {
 
                     if (mut != null) {
                         if (Minecraft.getInstance().level == null) {
+                            // From the main menu this is the config singleplayer worlds start with.
+                            // Upstream only set it in memory, so it was lost on restart.
                             ServerNetworking.CONFIG_HOLDER.instance = mut.toImmutable();
+                            ServerNetworking.CONFIG_HOLDER.save();
                         } else {
                             var original = ClientNetworking.HANDSHAKE_CLIENT.getConfig();
                             if (original.isPresent()){

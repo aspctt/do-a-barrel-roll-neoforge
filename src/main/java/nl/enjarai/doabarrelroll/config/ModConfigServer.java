@@ -40,9 +40,11 @@ public record ModConfigServer(boolean allowThrusting,
         return forceInstalled ? installedTimeout : null;
     }
 
+    // A literal rather than a translation, since the player being kicked does not have the mod's lang
+    // files. Upstream named its own Fabric release here, which a NeoForge player cannot use.
     @Override
     public Component getSyncTimeoutMessage() {
-        return Component.nullToEmpty("Please install Do a Barrel Roll 2.4.0 or later to play on this server.");
+        return Component.nullToEmpty("Please install Do Another Barrel Roll to play on this server.");
     }
 
     @Override

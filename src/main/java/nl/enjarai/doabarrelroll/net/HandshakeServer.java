@@ -53,12 +53,21 @@ public class HandshakeServer<P extends ConfigSyncS2CPacket> {
         return syncStates.computeIfAbsent(handler, key -> new ClientInfo(HandshakeState.NOT_SENT, PROTOCOL_VERSION, true));
     }
 
+    /**
+     * Builds the config packet for one player.
+     *
+     * <p>The config the client acts on goes through getLimited, which swaps in the
+     * operator config for anyone holding level 2 or the ignore_config permission.
+     * Upstream sent the plain config here and never called getLimited at all, so
+     * that documented bypass did nothing: operators were held to allowThrusting and
+     * forceEnabled like everyone else.
+     */
     public P initiateConfigSync(ServerGamePacketListenerImpl handler) {
         var isLimited = getsLimitedCheck.apply(handler);
         getHandshakeState(handler).isLimited = isLimited;
-        var config = configHolder.instance;
+        ModConfigServer config = configHolder.instance;
 
-        return packetConstructor.construct(PROTOCOL_VERSION, config, isLimited, isLimited ? ModConfigServer.DEFAULT : config);
+        return packetConstructor.construct(PROTOCOL_VERSION, config.getLimited(handler), isLimited, isLimited ? ModConfigServer.DEFAULT : config);
     }
 
     public void configSentToClient(ServerGamePacketListenerImpl handler) {
@@ -111,8 +120,14 @@ public class HandshakeServer<P extends ConfigSyncS2CPacket> {
         return info.state;
     }
 
+    /**
+     * Forgets a player who left. The pending kick goes too: left in place it would
+     * still fire, log that the player refused the config and disconnect a connection
+     * that is already closed.
+     */
     public void playerDisconnected(ServerGamePacketListenerImpl handler) {
         syncStates.remove(handler);
+        scheduledKicks.remove(handler);
     }
 
     public static class ClientInfo {
