@@ -15,13 +15,13 @@ public class ScreenUtil {
         //? if <26.2 {
         client.setScreen(screen);
         //?} else
-        /*client.gui.setScreen(screen);*/
+        //client.gui.setScreen(screen);
     }
 
     public static @Nullable Screen currentScreen(Minecraft client) {
         //? if <26.2 {
         return client.screen;
         //?} else
-        /*return client.gui.screen();*/
+        //return client.gui.screen();
     }
 }

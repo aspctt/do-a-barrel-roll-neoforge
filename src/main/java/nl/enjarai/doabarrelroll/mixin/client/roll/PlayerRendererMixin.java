@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.At;
 //? if <1.21.11 {
 @Mixin(PlayerRenderer.class)
 //?} else
-/*@Mixin(AvatarRenderer.class)*/
+//@Mixin(AvatarRenderer.class)
 public abstract class PlayerRendererMixin {
     //? if <1.21.11 {
     /**

@@ -7,7 +7,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 //?} else
-/*import net.minecraft.client.renderer.RenderPipelines;*/
+//import net.minecraft.client.renderer.RenderPipelines;
 
 import java.util.function.BiConsumer;
 

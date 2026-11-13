@@ -10,7 +10,7 @@ import net.minecraft.util.OptionEnum;
 //? if <1.21.11 {
 public enum ActivationBehaviour implements OptionEnum {
 //?} else
-/*public enum ActivationBehaviour {*/
+//public enum ActivationBehaviour {
     VANILLA,
     TRIPLE_JUMP,
     HYBRID,

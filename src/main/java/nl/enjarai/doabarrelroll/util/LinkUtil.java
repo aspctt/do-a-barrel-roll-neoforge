@@ -3,7 +3,7 @@ package nl.enjarai.doabarrelroll.util;
 //? if <26.3 {
 import net.minecraft.Util;
 //?} else
-/*import com.mojang.blaze3d.Blaze3D;*/
+//import com.mojang.blaze3d.Blaze3D;
 
 import java.net.URI;
 
@@ -18,6 +18,6 @@ public class LinkUtil {
         //? if <26.3 {
         Util.getPlatform().openUri(uri);
         //?} else
-        /*Blaze3D.openUri(uri);*/
+        //Blaze3D.openUri(uri);
     }
 }

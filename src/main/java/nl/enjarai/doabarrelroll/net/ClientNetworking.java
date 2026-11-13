@@ -3,7 +3,7 @@ package nl.enjarai.doabarrelroll.net;
 //? if <1.21.11 {
 import net.neoforged.neoforge.network.PacketDistributor;
 //?} else
-/*import net.neoforged.neoforge.client.network.ClientPacketDistributor;*/
+//import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import nl.enjarai.doabarrelroll.api.RollEntity;
 import nl.enjarai.doabarrelroll.api.event.ClientEvents;
 import nl.enjarai.doabarrelroll.config.ModConfigServer;
@@ -28,7 +28,7 @@ public class ClientNetworking {
             //? if <1.21.11 {
             PacketDistributor.sendToServer(new RollSyncC2SPacket(rolling, roll));
             //?} else
-            /*ClientPacketDistributor.sendToServer(new RollSyncC2SPacket(rolling, roll));*/
+            //ClientPacketDistributor.sendToServer(new RollSyncC2SPacket(rolling, roll));
         }
     }
 
@@ -36,13 +36,13 @@ public class ClientNetworking {
         //? if <1.21.11 {
         PacketDistributor.sendToServer(CONFIG_UPDATE_CLIENT.prepUpdatePacket(config));
         //?} else
-        /*ClientPacketDistributor.sendToServer(CONFIG_UPDATE_CLIENT.prepUpdatePacket(config));*/
+        //ClientPacketDistributor.sendToServer(CONFIG_UPDATE_CLIENT.prepUpdatePacket(config));
     }
 
     public static void sendOperatorBypassPacket(boolean operatorBypass) {
         //? if <1.21.11 {
         PacketDistributor.sendToServer(CONFIG_UPDATE_CLIENT.prepOperatorBypassPacket(operatorBypass));
         //?} else
-        /*ClientPacketDistributor.sendToServer(CONFIG_UPDATE_CLIENT.prepOperatorBypassPacket(operatorBypass));*/
+        //ClientPacketDistributor.sendToServer(CONFIG_UPDATE_CLIENT.prepOperatorBypassPacket(operatorBypass));
     }
 }

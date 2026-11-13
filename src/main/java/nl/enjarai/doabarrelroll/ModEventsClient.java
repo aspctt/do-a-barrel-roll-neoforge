@@ -73,7 +73,7 @@ public class ModEventsClient {
         //? if <1.21.11 {
         var entity = event.getCamera().getEntity();
         //?} else
-        /*var entity = event.getCamera().entity();*/
+        //var entity = event.getCamera().entity();
         if (!(entity instanceof RollEntity rollEntity)) return;
 
         float partialTick = (float) event.getPartialTick();
@@ -108,7 +108,7 @@ public class ModEventsClient {
             //? if <1.21.11 {
             event.getGuiGraphics().pose().popPose();
             //?} else
-            /*event.getGuiGraphics().pose().popMatrix();*/
+            //event.getGuiGraphics().pose().popMatrix();
             crosshairPosePushed = false;
         }
 
@@ -118,7 +118,7 @@ public class ModEventsClient {
         //? if <1.21.11 {
         context.pose().pushPose();
         //?} else
-        /*context.pose().pushMatrix();*/
+        //context.pose().pushMatrix();
         crosshairPosePushed = true;
         EventCallbacksClient.onRenderCrosshair(
                 context, event.getPartialTick(), context.guiWidth(), context.guiHeight());
@@ -131,7 +131,7 @@ public class ModEventsClient {
         //? if <1.21.11 {
         event.getGuiGraphics().pose().popPose();
         //?} else
-        /*event.getGuiGraphics().pose().popMatrix();*/
+        //event.getGuiGraphics().pose().popMatrix();
         crosshairPosePushed = false;
     }
 

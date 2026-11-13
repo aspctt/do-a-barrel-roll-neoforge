@@ -100,7 +100,7 @@ public class ModKeybindings {
         //? if <26.1 {
         client.player.displayClientMessage(message, true);
         //?} else
-        /*client.player.sendOverlayMessage(message);*/
+        //client.player.sendOverlayMessage(message);
     }
 
     private static KeyMapping movementKey(String name, int keyCode) {

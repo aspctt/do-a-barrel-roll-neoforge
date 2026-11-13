@@ -26,7 +26,7 @@ public class DoABarrelRollNeoForge {
         //? if <1.21.11 {
         if (FMLEnvironment.dist == Dist.CLIENT) {
         //?} else
-        /*if (FMLEnvironment.getDist() == Dist.CLIENT) {*/
+        //if (FMLEnvironment.getDist() == Dist.CLIENT) {
             DoABarrelRollClient.init();
             modEventBus.register(ModBusEventsClient.class);
 

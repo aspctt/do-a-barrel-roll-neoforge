@@ -68,7 +68,7 @@ public class ModPermissions {
         //? if <1.21.11 {
         return player.hasPermissions(level);
         //?} else
-        /*return player.permissions().hasPermission(new Permission.HasCommandLevel(PermissionLevel.byId(level)));*/
+        //return player.permissions().hasPermission(new Permission.HasCommandLevel(PermissionLevel.byId(level)));
     }
 
     private static boolean defaultResolve(@Nullable ServerPlayer player, UUID playerUUID, PermissionDynamicContext<?>... context) {

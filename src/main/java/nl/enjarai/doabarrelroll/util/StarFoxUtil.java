@@ -3,7 +3,7 @@ package nl.enjarai.doabarrelroll.util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 //? if >=1.21.11
-/*import net.minecraft.client.renderer.RenderPipelines;*/
+//import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
