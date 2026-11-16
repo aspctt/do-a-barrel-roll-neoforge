@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- The Kinetic Damage Type description is about wall damage instead of a copy of the Activation Behaviour one
+- The Spanish Insta-kill description shows its option name in bold instead of a stray "l"
+
 ## [3.7.5] - 2026-11-12
 
 ### Added

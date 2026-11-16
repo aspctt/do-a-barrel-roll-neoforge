@@ -81,7 +81,7 @@
   "config.do_a_barrel_roll.gameplay.kinetic_damage.high_speed": "High Speed",
   "config.do_a_barrel_roll.gameplay.kinetic_damage.none": "None",
   "config.do_a_barrel_roll.gameplay.kinetic_damage.instant_kill": "Insta-kill",
-  "config.do_a_barrel_roll.gameplay.kinetic_damage.description": "Configures how the Elytra is activated.\n\n\n",
+  "config.do_a_barrel_roll.gameplay.kinetic_damage.description": "Configures how much damage you take from flying into a wall with the Elytra.\n\n\n",
   "config.do_a_barrel_roll.gameplay.kinetic_damage.description.vanilla": "§lVanilla§r: Same as vanilla.\n",
   "config.do_a_barrel_roll.gameplay.kinetic_damage.description.high_speed": "§lHigh Speed§r: Only applies kinetic damage at significantly increased speed.\n",
   "config.do_a_barrel_roll.gameplay.kinetic_damage.description.none": "§lNone§r: Disables kinetic damage entirely.\n",
