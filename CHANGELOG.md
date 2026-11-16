@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.8.0] - 2026-11-16
+
 ### Added
 
 - Thrust While Disabled option, off by default. When on, thrusting keeps working while the mod is turned off, so you can fly with the vanilla controls and still thrust
@@ -72,7 +74,8 @@ First release of the native NeoForge port, forked from Do a Barrel Roll 3.7.3.
 - Fabric API, Forgified Fabric API, CICADA, Mod Menu and the Fabric permissions API, with nothing in their place
 - Controller support, since upstream's Controlify integration is a Fabric entrypoint and was already missing from its NeoForge build
 
-[Unreleased]: https://github.com/aspctt/do-a-barrel-roll-neoforge/compare/3.7.5...HEAD
+[Unreleased]: https://github.com/aspctt/do-a-barrel-roll-neoforge/compare/3.8.0...HEAD
+[3.8.0]: https://github.com/aspctt/do-a-barrel-roll-neoforge/compare/3.7.5...3.8.0
 [3.7.5]: https://github.com/aspctt/do-a-barrel-roll-neoforge/compare/3.7.4...3.7.5
 [3.7.4]: https://github.com/aspctt/do-a-barrel-roll-neoforge/compare/3.7.3...3.7.4
 [3.7.3]: https://github.com/aspctt/do-a-barrel-roll-neoforge/releases/tag/3.7.3
