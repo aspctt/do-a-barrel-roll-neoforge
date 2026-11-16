@@ -121,6 +121,8 @@ public class YACLImplementation {
                                                 "config.do_a_barrel_roll.thrust.enable_thrust.description",
                                                 ModKeybindings.THRUST_FORWARD.getTranslatedKeyMessage())))
                                         .binding(false, () -> ModConfig.INSTANCE.getEnableThrustClient(), value -> ModConfig.INSTANCE.setEnableThrust(value))))
+                                .option(thrustingAllowed.add(getBooleanOption("thrust", "thrust_while_disabled", true, false)
+                                        .binding(false, () -> ModConfig.INSTANCE.getThrustWhileDisabled(), value -> ModConfig.INSTANCE.setThrustWhileDisabled(value))))
                                 .option(thrustingAllowed.add(getOption(Double.class, "thrust", "max_thrust", true, false)
                                         .controller(option -> getDoubleSlider(option, 0.1, 10.0, 0.1))
                                         .binding(2.0, () -> ModConfig.INSTANCE.getMaxThrust(), value -> ModConfig.INSTANCE.setMaxThrust(value))))

@@ -77,6 +77,8 @@ Thrusting lets a player accelerate by holding W in flight, without using firewor
 
 To allow it, install the mod on the server and turn it on in the Server tab of the config screen. The tab only shows for level 3 operators and players with the `do_a_barrel_roll.configure` permission. You can also set `allowThrusting` in `config/do_a_barrel_roll-server.json`, which needs no client at all.
 
+Players who only want thrusting can turn on Thrust While Disabled in their own config and switch the rest of the mod off. They then fly with the vanilla controls and thrust with W, and the server still has to allow it.
+
 ### Server config
 
 `config/do_a_barrel_roll-server.json` holds these settings, and the Server tab edits the same ones:
@@ -96,6 +98,7 @@ A server that cannot run the mod can still send these settings. Send a packet to
 
 Flying works the same as upstream, and most of what changed is out of sight.
 
+- Thrust While Disabled is new. It keeps thrusting working with the rest of the mod turned off, for players who prefer the vanilla controls.
 - Controller support, the Mod Menu search easter egg and CICADA's update notices are gone. All three rely on Fabric-only code and were already missing from upstream's NeoForge build. The controller sensitivity settings stay in the config for anything else that drives the roll API.
 - The serverbound roll packet moved to `do_a_barrel_roll:roll_sync_c2s`, since NeoForge allows one payload per channel id rather than one per direction. The clientbound one keeps its original name.
 - Kinetic damage is applied through NeoForge's incoming damage event rather than by rewriting a local variable inside `LivingEntity.travel`.

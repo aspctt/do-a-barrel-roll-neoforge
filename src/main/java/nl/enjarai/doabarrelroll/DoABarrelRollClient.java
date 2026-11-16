@@ -70,13 +70,34 @@ public class DoABarrelRollClient {
             }
         }
 
+        return isElytraFlying();
+    }
+
+    /**
+     * Whether the thrust keys are live. Normally that is whenever the rest of the mod is, but
+     * Thrust While Disabled keeps them live for players who turned the mod off to fly with the
+     * vanilla controls.
+     *
+     * <p>The option only stands in for the mod being off. With the mod on, Hybrid's plain elytra
+     * flight before the third jump still has no thrust, as it always has, and a server forcing
+     * the mod on already makes the first check pass.
+     */
+    public static boolean isThrustActive() {
+        if (isFallFlying()) return true;
+        if (ModConfig.INSTANCE.getModEnabled() || !ModConfig.INSTANCE.getThrustWhileDisabled()) return false;
+
+        return isElytraFlying();
+    }
+
+    /**
+     * Whether the player is gliding, with Disable When Submerged as the only setting applied.
+     * Thrusting honours that setting even with the mod off, so it stops underwater the same way.
+     */
+    private static boolean isElytraFlying() {
         var player = Minecraft.getInstance().player;
-        if (player == null) {
-            return false;
-        }
-        if (ModConfig.INSTANCE.getDisableWhenSubmerged() && player.isUnderWater()) {
-            return false;
-        }
+        if (player == null) return false;
+        if (ModConfig.INSTANCE.getDisableWhenSubmerged() && player.isUnderWater()) return false;
+
         return player.isFallFlying();
     }
 

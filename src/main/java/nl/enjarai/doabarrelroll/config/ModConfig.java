@@ -80,6 +80,8 @@ public class ModConfig {
         Thrust thrust = new Thrust();
         static class Thrust {
             boolean enable_thrust = false;
+            // New in this port, so upstream ignores it if the file is ever taken back there
+            boolean thrust_while_disabled = false;
             double max_thrust = 2.0;
             double thrust_acceleration = 0.1;
             boolean thrust_particles = true;
@@ -191,6 +193,15 @@ public class ModConfig {
 
     public boolean getEnableThrustClient() {
         return general.thrust.enable_thrust;
+    }
+
+    /**
+     * Whether thrusting keeps working while the mod is turned off. This only lifts the need for
+     * the mod to be on: thrusting still needs Enable Thrusting and the server's permission, which
+     * {@link #getEnableThrust()} checks.
+     */
+    public boolean getThrustWhileDisabled() {
+        return general.thrust.thrust_while_disabled;
     }
 
     public double getMaxThrust() {
@@ -335,6 +346,10 @@ public class ModConfig {
 
     public void setEnableThrust(boolean enabled) {
         general.thrust.enable_thrust = enabled;
+    }
+
+    public void setThrustWhileDisabled(boolean enabled) {
+        general.thrust.thrust_while_disabled = enabled;
     }
 
     public void setMaxThrust(double thrust) {

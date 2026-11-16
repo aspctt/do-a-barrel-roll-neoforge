@@ -38,6 +38,8 @@
   "config.do_a_barrel_roll.thrust": "Opciones de Impulso",
   "config.do_a_barrel_roll.thrust.enable_thrust": "Habilitar impulso",
   "config.do_a_barrel_roll.thrust.enable_thrust.description": "Permite a los jugadores usar las teclas de avance y retroceso (W y S por defecto)  para acelerar y desacelerar infinitamente respectivamente.\n§4Esta función está deshabilitada en cualquier servidor que no lo permita explícitamente.\n",
+  "config.do_a_barrel_roll.thrust.thrust_while_disabled": "Impulso con el mod deshabilitado",
+  "config.do_a_barrel_roll.thrust.thrust_while_disabled.description": "Mantiene el impulso funcionando mientras Mod Habilitado está desactivado, así puedes volar con los controles vanilla y seguir acelerando sin cohetes.\n",
   "config.do_a_barrel_roll.thrust.max_thrust": "Velocidad Máxima de Impulso",
   "config.do_a_barrel_roll.thrust.max_thrust.description": "La velocidad máxima que se puede alcanzar al acelerar. Configurar esto en cualquier valor por encima de 2-3 podría causar problemas con la carga lenta de los Chunks.\n",
   "config.do_a_barrel_roll.thrust.thrust_acceleration": "Aceleración del Impulso",

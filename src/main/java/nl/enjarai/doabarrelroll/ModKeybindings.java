@@ -47,8 +47,9 @@ public class ModKeybindings {
             CATEGORY
     );
 
-    // The movement bindings all go into CONTEXT below, which is what lets yaw sit
-    // on the strafe keys without conflicting with them outside of flight.
+    // The movement bindings go into CONTEXT and THRUST_CONTEXT below, which is what
+    // lets yaw sit on the strafe keys and thrust on W without conflicting with them
+    // outside of flight.
     public static final KeyMapping PITCH_UP = movementKey("pitch_up", InputConstants.UNKNOWN.getValue());
     public static final KeyMapping PITCH_DOWN = movementKey("pitch_down", InputConstants.UNKNOWN.getValue());
     public static final KeyMapping YAW_LEFT = movementKey("yaw_left", InputConstants.KEY_A);
@@ -77,6 +78,14 @@ public class ModKeybindings {
             DoABarrelRollClient.FALL_FLYING_GROUP
     );
 
+    // Thrust has a context of its own so Thrust While Disabled can keep it live with
+    // the mod off. Widening CONTEXT instead would have left the pitch, yaw and roll
+    // keys live in that case too, with nothing reading them.
+    public static final InputContext THRUST_CONTEXT = InputContext.of(
+            DoABarrelRoll.id("thrust"),
+            DoABarrelRollClient::isThrustActive
+    );
+
     static {
         CONTEXT.addKeyBinding(PITCH_UP);
         CONTEXT.addKeyBinding(PITCH_DOWN);
@@ -84,8 +93,8 @@ public class ModKeybindings {
         CONTEXT.addKeyBinding(YAW_RIGHT);
         CONTEXT.addKeyBinding(ROLL_LEFT);
         CONTEXT.addKeyBinding(ROLL_RIGHT);
-        CONTEXT.addKeyBinding(THRUST_FORWARD);
-        CONTEXT.addKeyBinding(THRUST_BACKWARD);
+        THRUST_CONTEXT.addKeyBinding(THRUST_FORWARD);
+        THRUST_CONTEXT.addKeyBinding(THRUST_BACKWARD);
     }
 
     /**

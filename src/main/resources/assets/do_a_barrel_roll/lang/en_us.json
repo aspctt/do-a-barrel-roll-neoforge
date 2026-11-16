@@ -41,6 +41,8 @@
   "config.do_a_barrel_roll.thrust": "Thrusting Options",
   "config.do_a_barrel_roll.thrust.enable_thrust": "Enable Thrusting",
   "config.do_a_barrel_roll.thrust.enable_thrust.description": "Enables you to use the %1$s key to infinitely accelerate while flying with an Elytra.\n§4This feature is disabled on any server that does not explicitly allow it.\n",
+  "config.do_a_barrel_roll.thrust.thrust_while_disabled": "Thrust While Disabled",
+  "config.do_a_barrel_roll.thrust.thrust_while_disabled.description": "Keeps thrusting working while Mod Enabled is off, so you can fly with the vanilla controls and still accelerate without fireworks.\n",
   "config.do_a_barrel_roll.thrust.max_thrust": "Max Thrusting Speed",
   "config.do_a_barrel_roll.thrust.max_thrust.description": "The maximum speed that can be reached by thrusting in blocks per tick.  Setting this to anything above 2-3 might cause problems with chunks not loading fast enough.\n",
   "config.do_a_barrel_roll.thrust.thrust_acceleration": "Thrusting Acceleration",

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Thrust While Disabled option, off by default. When on, thrusting keeps working while the mod is turned off, so you can fly with the vanilla controls and still thrust
+
 ### Fixed
 
 - The Kinetic Damage Type description is about wall damage instead of a copy of the Activation Behaviour one
