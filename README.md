@@ -25,49 +25,35 @@
 
 **Do Another Barrel Roll is a native NeoForge port of [enjarai's Do a Barrel Roll](https://github.com/enjarai/do-a-barrel-roll).**
 
-Do a Barrel Roll is a lightweight, mostly clientside mod that changes elytra flight to be more fun and semi-realistic. It redesigns movement around a completely unlocked camera, giving you full pitch, yaw and roll control in flight, plus a set of subtle and less subtle camera modifiers including smoothing and banking.
+Do a Barrel Roll unlocks the camera during elytra flight. Moving the mouse sideways rolls you and moving it up and down pitches you, while A and D yaw. Rolling to one side also turns you toward it, which the mod calls banking, and camera smoothing takes the edge off sharp inputs.
 
-Upstream ships a NeoForge build, but it is produced from a multiloader template and runs on the Forgified Fabric API, which has to be installed alongside it. This port is written against NeoForge directly:
+Upstream ships a NeoForge build of its own, but it is made from a multiloader template and runs on the Forgified Fabric API, which has to be installed alongside it. This port is written against NeoForge directly, so it needs no Fabric API, Forgified Fabric API, CICADA, Mod Menu or Fabric permissions API. It uses Mojang mappings throughout and hooks into NeoForge's own events wherever NeoForge has one.
 
-* No Fabric API and no Forgified Fabric API.
-* No CICADA, no Mod Menu, no Fabric permissions API.
-* Mojang mappings throughout, with the camera, HUD, damage, keybinding and networking hooks moved onto NeoForge's own events where NeoForge has one.
-
-Behaviour is otherwise the same as upstream. Configs, keybinds, permission nodes and the server handshake all keep their original names, so an existing `do_a_barrel_roll-client.json` or `do_a_barrel_roll-server.json` carries over untouched.
+Configs, keybinds, permission nodes and the server handshake all keep their original names, so an existing `do_a_barrel_roll-client.json` or `do_a_barrel_roll-server.json` carries over untouched.
 
 ![](img/ravine.gif)
 
 ## Controls
 
-The default controls are as follows, but can be modified:
+The mouse handles roll and pitch, while A and D yaw. The I key turns the mod on and off, and the config can swap roll with yaw or invert pitch.
 
-- Mouse x axis to roll
-- Mouse y axis to pitch
-- strafe keys (normally A and D) to yaw
-
-The flight bindings sit in their own key conflict context, so binding yaw to A and D does not conflict with vanilla strafing: they are only live while you are flying.
+Every key can be rebound in the controls menu. The flight keys sit in their own key conflict context and only work while you are flying, so yaw can share A and D with strafing without the menu marking them as a conflict.
 
 ## Configuration
 
-Install [YACL](https://modrinth.com/mod/yacl) and the config screen is reachable from the Config button next to the mod in NeoForge's mod list, or from a keybind you can set yourself. Without YACL the mod still runs; the button just offers to install it.
+Install [YACL](https://modrinth.com/mod/yacl) and the config screen opens from the Config button next to the mod in NeoForge's mod list, or from a key you bind yourself. Without YACL the mod runs the same, and the button offers to open YACL's download page instead.
 
-A wide range of options are available, including custom mouse behavior, elytra activation restrictions and changing values of modifiers like banking, sensitivity and more.
+The options cover sensitivity and smoothing per axis, banking strength, automatic righting, a momentum-based mouse mode, a horizon widget and how the elytra activates. Triple Jump, for example, takes two jumps in the air instead of one, so sprint jumping stops opening your elytra by accident.
 
 ## Server-side features
 
-Visual aspects of the mod (playermodel roll in particular) can be synced between clients by installing it on the server-side as well. Everything is still fully compatible with both vanilla clients and servers. All the following configurations are valid:
-
-- Server with mod, client with mod: visuals are synced
-- Server with mod, client without mod: client can join and play without issues, but can't see visuals
-- Server without mod, client with mod: client can join and play without issues, but can only see their own visuals
-- Server with mod, client 1 with mod, client 2 with mod, client 3 without mod: client 1 and 2 can see each other's visuals, client 3 cannot
-- Server without mod, client 1 with mod, client 2 with mod, client 3 without mod: client 1 and 2 can only see their own visuals
+Installed on the server as well, the mod syncs each player's roll so others can see it. Vanilla clients and vanilla servers stay compatible in every combination. A vanilla client joins a modded server and plays normally without seeing anyone roll, and a modded client on a vanilla server sees only its own roll. In short, you see another player roll only when you, they and the server all have the mod.
 
 ![](img/do-a-barrel-roll.gif)
 
 ## Installation
 
-Pick the jar matching your Minecraft version:
+Drop the jar for your Minecraft version into your `mods` folder. Nothing else is required.
 
 | Minecraft | NeoForge | YACL, optional |
 | --- | --- | --- |
@@ -77,46 +63,44 @@ Pick the jar matching your Minecraft version:
 | 26.2 | 26.2.0.76 or newer | 3.9.5 or newer |
 | 26.3 | 26.3.0.12-beta or newer | 3.9.7 or newer |
 
-The 26.1 jar covers the whole 26.1.x line. Drop the JAR in your `mods` folder. Nothing else is required.
+The 26.1 jar covers 26.1, 26.1.1 and 26.1.2.
 
-## Disclaimers
+## Anticheat
 
-This mod does not actually modify the flight physics themselves, so in most cases it shouldn't trigger anticheat. However, doing things like loop de loops looks to the server like rapid camera movement and may get you flagged. **Use at your own risk.**
+Thrusting aside, the mod does not change the flight physics, so most anticheats have nothing to catch. Loops and fast rolls still look like very rapid camera movement to the server, though, and some anticheats flag that. Use it at your own risk.
 
 ## For server admins
 
 ### Thrusting
 
-The mod includes a "thrusting" feature that is probably considered cheating by most servers, as it lets users accelerate without using fireworks. **It is disabled by default on servers.**
+Thrusting lets a player accelerate by holding W in flight, without using fireworks. Most servers would call that cheating, so it stays off until the server allows it, and each player also has to turn on Enable Thrusting in their own config.
 
-To allow it, install the mod on your server and, while in the world, use the "Server" tab on the config screen. That tab is only available to level 3 operators and players holding the `do_a_barrel_roll.configure` permission. You can also edit `config/do_a_barrel_roll-server.json` directly to configure the mod without a client.
+To allow it, install the mod on the server and turn it on in the Server tab of the config screen. The tab only shows for level 3 operators and players with the `do_a_barrel_roll.configure` permission. You can also set `allowThrusting` in `config/do_a_barrel_roll-server.json`, which needs no client at all.
 
-On platforms that have no official support, send a packet to the client at login on the `do_a_barrel_roll:config_sync` channel and it will reply on `do_a_barrel_roll:config_response`. The payload layout matches upstream's protocol version 4.
+### Server config
 
-### Other features
+`config/do_a_barrel_roll-server.json` holds these settings, and the Server tab edits the same ones:
 
-The server config includes a few other options:
-
-- `allowThrusting`: Lets players accelerate with the thrust keys.
-- `forceEnabled`: Forces the mod to be enabled for all players, regardless of their client configuration.
-- `forceInstalled`: Rejects any player trying to join without having the mod installed on their client.
-- `installedTimeout`: The amount of time (in ticks) to wait for a client to respond to the config sync packet. Increase this if players with bad connections are getting kicked despite having the mod installed.
-- `kineticDamage`: How elytra wall impacts hurt, from vanilla through to disabled or instantly lethal.
+- `allowThrusting`: Lets players thrust. Off by default.
+- `forceEnabled`: Keeps the mod on for every player, whatever their client config says.
+- `forceInstalled`: Kicks anyone who joins without the mod.
+- `installedTimeout`: How many ticks the server waits for a client to answer the config sync before `forceInstalled` kicks it. The default is 40, which is two seconds. Raise it if players on slow connections get kicked despite having the mod.
+- `kineticDamage`: What hitting a wall in flight does. `VANILLA` is the default, `HIGH_SPEED` only hurts at much higher speeds, `NONE` turns it off and `INSTANT_KILL` does what it says.
 - `operatorBypass`: Lets level 2 operators and players with the `do_a_barrel_roll.ignore_config` permission ignore `allowThrusting` and `forceEnabled`. Off by default.
 
-Both permission nodes, `do_a_barrel_roll.configure` and `do_a_barrel_roll.ignore_config`, are registered with NeoForge's permission API, so any permission handler mod can grant them. `operatorBypass` is new in this port. Upstream documented the bypass but never applied it, so it starts off and servers keep behaving as they always have until an admin turns it on.
+Both permission nodes are registered with NeoForge's permission API, so any permission handler mod can grant them. `operatorBypass` is new in this port. Upstream documented the bypass but never applied it, so it starts off and servers keep behaving as they always have until an admin turns it on.
+
+A server that cannot run the mod can still send these settings. Send a packet to the client at login on the `do_a_barrel_roll:config_sync` channel and it replies on `do_a_barrel_roll:config_response`. The payload layout matches upstream's protocol version 4.
 
 ## Differences from upstream
 
-Everything a player interacts with is the same. What changed underneath:
+Flying works the same as upstream, and most of what changed is out of sight.
 
-- Controller support is gone. Upstream's Controlify integration is a Fabric entrypoint and was already absent from the NeoForge build. The controller sensitivity settings are still in the config for anything else that drives the roll API.
-- The Mod Menu search easter egg is gone with Mod Menu, which is Fabric-only. It was already absent from the NeoForge build.
-- CICADA's update notices are gone. That is enjarai's Fabric-only library, and it was already absent from the NeoForge build.
-- The clientbound roll packet keeps its original channel name; the serverbound one is renamed to `do_a_barrel_roll:roll_sync_c2s`, because NeoForge allows one payload per channel id rather than one per direction.
+- Controller support, the Mod Menu search easter egg and CICADA's update notices are gone. All three rely on Fabric-only code and were already missing from upstream's NeoForge build. The controller sensitivity settings stay in the config for anything else that drives the roll API.
+- The serverbound roll packet moved to `do_a_barrel_roll:roll_sync_c2s`, since NeoForge allows one payload per channel id rather than one per direction. The clientbound one keeps its original name.
 - Kinetic damage is applied through NeoForge's incoming damage event rather than by rewriting a local variable inside `LivingEntity.travel`.
 - Camera roll, the crosshair widgets, the Peppy overlay and the F3 roll readout all go through NeoForge events instead of mixins.
-- On 1.21.11 and newer the F3 roll readout is a line of its own rather than part of the facing line. Those versions turned the debug screen into a registry of entries that can only add lines.
+- On 1.21.11 and newer the F3 roll readout gets a line of its own rather than joining the facing line. Those versions turned the debug screen into a registry of entries that can only add lines.
 - Lang files are JSON rather than the YAML upstream compiles with yamlang.
 
 ## Building
@@ -127,16 +111,16 @@ All five Minecraft versions are built from one source tree with [Stonecutter](ht
 ./gradlew buildAll
 ```
 
-That writes one jar per target under `versions/<target>/build/libs/`. To work on a single version, run `./gradlew "26.2:build"`, or switch the source tree over with the "Set active project to ..." tasks so the IDE resolves against that version. Run `Reset active project` before committing, so the tree goes back to 1.21.1.
+That writes one jar per target under `versions/<target>/build/libs/`. To work on a single version, run `./gradlew "26.2:build"`, or switch the source tree over with the "Set active project to <target>" tasks so the IDE resolves against that version. Run `Reset active project` before committing, so the tree goes back to 1.21.1.
 
-Version specific code is marked inline with `//? if` comments, or handled as a rename in [stonecutter.gradle.kts](./stonecutter.gradle.kts) when nothing but a name changed.
+Version-specific code is marked inline with `//? if` comments, or handled as a rename in [stonecutter.gradle.kts](./stonecutter.gradle.kts) when nothing but a name changed.
 
 ### Checks
 
 Two kinds of mistake compile cleanly and still fail in the game, so both are checked against the game's own bytecode with `javap`. CI runs them on every build.
 
-* **Mixin targets.** A mixin names its targets in strings javac never looks at. `tools/check-mixin-targets.py` confirms every injected method, accessor and shadowed field or method still exists on each target with the types the mixin expects, and that each injection handler's arguments still match.
-* **Older NeoForge builds.** A jar is compiled once, against one NeoForge build, but accepts older ones too. The 26.1 jar is built on 26.1.2 and also has to run on 26.1 and 26.1.1. `tools/check-linkage.py` reads every game method, field and class the jar uses and checks each one exists in the oldest build it accepts.
+- **Mixin targets.** A mixin names its targets in strings javac never looks at. `tools/check-mixin-targets.py` confirms every injected method, accessor and shadowed field or method still exists on each target with the types the mixin expects, and that each injection handler's arguments still match.
+- **Older NeoForge builds.** A jar is compiled once, against one NeoForge build, but accepts older ones too. The 26.1 jar is built on 26.1.2 and also has to run on 26.1 and 26.1.1. `tools/check-linkage.py` reads every game method, field and class the jar uses and checks each one exists in the oldest build it accepts.
 
 ```bash
 python tools/check-mixin-targets.py
@@ -145,15 +129,17 @@ python tools/check-linkage.py 26.1 26.1.0.19-beta
 python tools/check-mixin-targets.py 26.1 --neoforge 26.1.0.19-beta
 ```
 
-Each NeoForge minimum in `versions/<target>/gradle.properties` is a build these checks have passed on. Lowering one should come with the same checks against the new floor, and the list of floors in `.github/workflows/build.yml` should match.
+Each NeoForge minimum in `versions/<target>/gradle.properties` is a build these checks have passed on. If you lower one, run the same checks against the new floor and add it to the list in `.github/workflows/build.yml`.
 
 ### Releasing
 
 `./gradlew publishMods` uploads every target with its sources jar to Modrinth and CurseForge, and creates one GitHub release for the version with the main jars attached, using [mod-publish-plugin](https://modmuss50.github.io/mod-publish-plugin/). Each platform gets the targets one at a time, from the oldest Minecraft version to the newest. The notes come from the version's section of `CHANGELOG.md`, and the portals list each jar for the Minecraft versions in `release_minecraft_versions`.
 
-Releases normally go out through the Release workflow in the Actions tab, started by hand with Run workflow. Push the version's tag first: the workflow refuses to run unless the tag exists and marks the commit it is building. Ticking "dry run" shows what would be uploaded without sending anything. It reads `MODRINTH_TOKEN`, a Modrinth personal access token that can create, read and write versions, and `CURSEFORGE_TOKEN`, a CurseForge API token, from the repository's Actions secrets, and uses the workflow's own token for GitHub.
+Releases normally go out through the Release workflow, started by hand from the Actions tab. Push the version's tag first, since the workflow stops unless the tag exists and marks the commit it is building. It takes two tokens from the repository's Actions secrets. `MODRINTH_TOKEN` is a Modrinth personal access token that can create, read and write versions, and `CURSEFORGE_TOKEN` is a CurseForge API token. GitHub uses the workflow's own token.
 
-To publish from a local machine instead, set those two tokens and a `GITHUB_TOKEN` that can write the repository's contents as environment variables, then run `./gradlew publishMods`. With any of the three missing the run is a dry run, which uploads nothing and writes what it would have sent under each project's `build/publishMods`.
+Ticking "dry run" builds everything and uploads nothing. The files it would have sent stay on the runner, so read them from a local dry run instead.
+
+To publish from a local machine, set those two tokens and a `GITHUB_TOKEN` that can write the repository's contents as environment variables, then run `./gradlew publishMods`. With any of the three missing the run is a dry run, which uploads nothing and writes what it would have sent under each project's `build/publishMods`.
 
 ## Credits
 

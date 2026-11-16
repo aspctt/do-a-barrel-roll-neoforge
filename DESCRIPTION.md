@@ -23,7 +23,7 @@
 
 **A native NeoForge port of enjarai's Do a Barrel Roll.**
 
-Do a Barrel Roll is a lightweight, mostly clientside mod that changes elytra flight to be more fun and semi-realistic. It redesigns movement around a completely unlocked camera, giving you full pitch, yaw and roll control in flight, along with camera modifiers like smoothing and banking.
+Do a Barrel Roll unlocks the camera during elytra flight. Moving the mouse sideways rolls you and moving it up and down pitches you, while A and D yaw. Rolling to one side also turns you toward it, which the mod calls banking, and camera smoothing takes the edge off sharp inputs.
 
 <p align="center" style="text-align: center;">
 	<img alt="PreviewGIF" src="https://github.com/enjarai/do-a-barrel-roll/raw/1.19.4/dev/img/ravine.gif">
@@ -31,21 +31,21 @@ Do a Barrel Roll is a lightweight, mostly clientside mod that changes elytra fli
 
 ### Why this version exists
 
-The official NeoForge build is produced from a multiloader template and runs on the Forgified Fabric API, so that has to be installed alongside it before the game will start. This port is written against NeoForge directly, with no Fabric API, no Forgified Fabric API, no CICADA, no Mod Menu and no Fabric permissions API. Nothing is required beyond NeoForge itself.
+The official NeoForge build is made from a multiloader template and runs on the Forgified Fabric API, so that has to be installed alongside it before the game will start. This port is written against NeoForge directly, with no Fabric API, no Forgified Fabric API, no CICADA, no Mod Menu and no Fabric permissions API. Nothing is required beyond NeoForge itself.
 
-Behaviour is unchanged. Configs, keybinds, permission nodes and the server handshake keep their original names, so an existing config file carries straight over.
+Flying works the same as upstream. Configs, keybinds, permission nodes and the server handshake keep their original names, so an existing config file carries straight over.
 
 ### Controls
 
-Mouse x axis rolls, mouse y axis pitches, and the strafe keys yaw. All rebindable. The flight bindings sit in their own key conflict context, so putting yaw on A and D does not conflict with vanilla strafing: they are only live while you are flying.
+The mouse handles roll and pitch, while A and D yaw. The I key turns the mod on and off, and every key can be rebound. The flight keys only work while you are flying, so yaw shares A and D with strafing without showing up as a conflict.
 
 ### Configuration
 
-Install [YACL](https://modrinth.com/mod/yacl) and the config screen appears behind the Config button next to the mod in NeoForge's mod list. YACL is optional; without it the mod runs the same and the button offers to install it.
+Install [YACL](https://modrinth.com/mod/yacl) and the config screen opens from the Config button next to the mod in NeoForge's mod list. It covers sensitivity and smoothing per axis, banking, a horizon widget and how the elytra activates. YACL is optional; without it the mod runs the same and the button offers to open YACL's download page.
 
 ### Server-side features
 
-Install it on the server as well and playermodel roll is synced between clients. Vanilla clients and vanilla servers stay fully compatible either way. Operators get a Server tab covering thrusting, forced activation, forced installation and kinetic damage, and both permission nodes are registered with NeoForge's permission API.
+Install the mod on the server as well and players see each other roll. Vanilla clients and vanilla servers stay compatible either way. Thrusting, which lets you accelerate without fireworks, stays off on servers until they allow it. Operators get a Server tab for thrusting, forced activation, forced installation, kinetic damage and an operator bypass, and both permission nodes are registered with NeoForge's permission API.
 
 ### Requirements
 
