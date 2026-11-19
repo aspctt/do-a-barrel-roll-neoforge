@@ -7,6 +7,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.settings.IKeyConflictContext;
 import nl.enjarai.doabarrelroll.api.key.InputContext;
+import nl.enjarai.doabarrelroll.util.ScreenUtil;
+//? if <26.3 {
+import org.lwjgl.glfw.GLFW;
+//?} else
+//import org.lwjgl.sdl.SDLMouse;
 
 import java.util.List;
 import java.util.Objects;
@@ -45,7 +50,8 @@ public final class InputContextImpl implements InputContext {
      * binding, and thrust did nothing until W was let go and pressed again. A key
      * let go while the context was off stayed down too, and came back as phantom
      * thrust on the next flight. Upstream re-read the keyboard whenever the state
-     * flipped, which fixes both, so this does the same on the way in.
+     * flipped, which fixes both, so this does the same on the way in, and reads
+     * mouse buttons too.
      */
     public void tick() {
         boolean isActive = activeCondition.get();
@@ -64,16 +70,57 @@ public final class InputContextImpl implements InputContext {
      * in the game, and on 1.21.1 it also flips toggle sprint or sneak whenever their
      * key happens to be held at that moment. Only this context's bindings missed
      * events, so only they are touched.
+     *
+     * <p>An earlier version copied setAll() in skipping mouse buttons. Vanilla can
+     * afford that, since nothing filters its mouse releases, but here a release
+     * dropped while the context was off left a mouse-bound roll key down, and the
+     * camera spun on the next flight until the button was clicked again.
      */
     private void syncHeldKeys() {
         for (var keyBinding : keyBindings) {
-            var key = keyBinding.getKey();
-
-            // Mouse buttons and unbound keys are left alone, as vanilla's own resync does
-            if (key.getType() != InputConstants.Type.KEYSYM || key.getValue() == InputConstants.UNKNOWN.getValue()) continue;
-
-            keyBinding.setDown(isKeyDown(key.getValue()));
+            keyBinding.setDown(isHeld(keyBinding.getKey()));
         }
+    }
+
+    /**
+     * Whether a key or mouse button is physically held right now. Anything that
+     * cannot be read counts as released, which at worst means pressing it again,
+     * where leaving the old state could leave a missed release stuck down.
+     */
+    private static boolean isHeld(InputConstants.Key key) {
+        // An unbound key has no code to read, and 26.3 throws on reading it from SDL's key array
+        if (key.getValue() == InputConstants.UNKNOWN.getValue()) return false;
+
+        var type = key.getType();
+        if (type == InputConstants.Type.KEYSYM) return isKeyDown(key.getValue());
+
+        // Vanilla only hands mouse buttons to bindings while no screen is open. A button
+        // held down in a screen would have its release go to the screen instead, and the
+        // binding would stay down after it closed, so it waits for a fresh click.
+        if (type == InputConstants.Type.MOUSE) {
+            return ScreenUtil.currentScreen(Minecraft.getInstance()) == null && isMouseButtonDown(key.getValue());
+        }
+
+        // Scancode keys, which only exist before 26.3, have no call that reads them
+        return false;
+    }
+
+    /**
+     * Whether a mouse button is held right now. GLFW numbers buttons from 0 and SDL3,
+     * which 26.3 moved to, from 1, matching how each version stores mouse bindings.
+     */
+    private static boolean isMouseButtonDown(int button) {
+        //? if <1.21.11 {
+        return GLFW.glfwGetMouseButton(Minecraft.getInstance().getWindow().getWindow(), button) == GLFW.GLFW_PRESS;
+        //?} else if <26.3 {
+        /*return GLFW.glfwGetMouseButton(Minecraft.getInstance().getWindow().handle(), button) == GLFW.GLFW_PRESS;
+        *///?} else {
+        /*// SDL reports every button at once, as a mask with bit 0 for button 1. A
+        // button below 1 would shift by a negative amount and read an unrelated bit.
+        if (button < 1) return false;
+
+        return (SDLMouse.SDL_GetMouseState(null, null) & (1 << (button - 1))) != 0;
+        *///?}
     }
 
     /**

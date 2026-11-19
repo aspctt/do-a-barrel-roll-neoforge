@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- A flight key bound to a mouse button no longer stays held when let go outside of flight, which kept the camera rolling on the next flight
+- A flight key bound to a mouse button works when already held at takeoff, instead of needing a fresh click
+
 ## [3.8.0] - 2026-11-16
 
 ### Added
