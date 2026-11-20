@@ -4,9 +4,13 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.gui.screens.options.controls.KeyBindsList;
+import net.neoforged.neoforge.client.settings.IKeyConflictContext;
+import net.neoforged.neoforge.client.settings.KeyConflictContext;
+import nl.enjarai.doabarrelroll.impl.key.InputContextImpl;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 /**
@@ -36,6 +40,20 @@ public abstract class KeyBindsListEntryMixin {
 
         var first = key.getKeyConflictContext();
         var second = otherBinding.getKeyConflictContext();
-        return first.conflicts(second) || second.conflicts(first);
+        return doABarrelRoll$contextsConflict(first, second) || doABarrelRoll$contextsConflict(second, first);
+    }
+
+    /**
+     * Whether the first context says it overlaps the second, minus a flight context's
+     * claim on IN_GAME. That claim only exists to keep NeoForge from cutting flight keys
+     * off while a modifier is held, see InputContextImpl#conflicts. Marking it here would
+     * flag yaw against strafing and thrust against walking forward, which share their
+     * keys on purpose.
+     */
+    @Unique
+    private static boolean doABarrelRoll$contextsConflict(IKeyConflictContext context, IKeyConflictContext other) {
+        if (context instanceof InputContextImpl && other == KeyConflictContext.IN_GAME) return false;
+
+        return context.conflicts(other);
     }
 }

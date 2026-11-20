@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Flight keys keep working while Shift, Ctrl or Alt is held, instead of cutting out and sometimes staying held after being let go
+- A flight key bound to Shift, Ctrl or Alt works
+
 ## [3.8.1] - 2026-11-19
 
 ### Fixed

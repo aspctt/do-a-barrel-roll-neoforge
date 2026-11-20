@@ -14,9 +14,9 @@ import java.util.function.Supplier;
  *
  * <p>On NeoForge this is a {@link IKeyConflictContext}, so a binding added to a
  * context is reported as pressed only while the context is active, and the
- * controls screen does not flag it as conflicting with a binding that can never
- * be active at the same time. That is what lets the flight controls sit on keys
- * the vanilla movement bindings already use.
+ * controls screen does not flag it as conflicting with the in-game bindings it
+ * shares keys with. That is what lets the flight controls sit on keys the
+ * vanilla movement bindings already use.
  */
 public interface InputContext extends IKeyConflictContext {
     static InputContext of(ResourceLocation id, Supplier<Boolean> activeCondition) {

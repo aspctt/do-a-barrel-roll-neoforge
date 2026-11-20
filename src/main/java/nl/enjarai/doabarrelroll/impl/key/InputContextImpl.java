@@ -6,6 +6,7 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.settings.IKeyConflictContext;
+import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import nl.enjarai.doabarrelroll.api.key.InputContext;
 import nl.enjarai.doabarrelroll.util.ScreenUtil;
 //? if <26.3 {
@@ -149,14 +150,22 @@ public final class InputContextImpl implements InputContext {
     }
 
     /**
-     * Only bindings in the same context can conflict with each other. A binding
-     * outside any context, including every vanilla one, is checked from its own
-     * side too, and the universal context those use answers true; the conflict
-     * suppression for that case lives in KeyBindsListEntryMixin.
+     * Whether this context can be live at the same time as another: only itself, and
+     * IN_GAME, which every flight necessarily overlaps.
+     *
+     * <p>IN_GAME is there for NeoForge's modifier check rather than the controls screen.
+     * A binding without a modifier counts as released while Shift, Ctrl or Alt is held,
+     * unless its context conflicts with IN_GAME, which is how the vanilla movement keys
+     * escape that rule. An earlier version answered only for itself, so every flight key
+     * cut out while sprinting on Ctrl, a flight key bound to Shift, Ctrl or Alt could never
+     * fire, and a press or release made with a modifier held was dropped, which left yaw
+     * or roll running after the key was let go. KeyBindsListEntryMixin keeps the controls
+     * screen from flagging the IN_GAME overlap, since flight keys sharing keys with the
+     * in-game ones is intended.
      */
     @Override
     public boolean conflicts(IKeyConflictContext other) {
-        return this == other;
+        return this == other || other == KeyConflictContext.IN_GAME;
     }
 
     @Override
